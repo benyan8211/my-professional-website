@@ -1,0 +1,25 @@
+import Image from 'next/image'
+import myProfessionalPicture from "../../assets/professional_picture.jpg";
+import styles from "./homePageContents.module.css";
+
+
+const HomePageContents = () => {
+    return (
+        <>
+            <div className="flex justify-center mt-15">
+                <div className="relative w-82 h-82 overflow-hidden rounded-full">
+                    <Image
+                        src={myProfessionalPicture}
+                        width={500}
+                        height={500}
+                        alt="Picture of the author"
+                        className="object-cover"
+                    />
+                </div>
+            </div>
+            <h1 className={styles.homePageSubHeading}>Professional software developer • AI hobbyist • Continuous learner</h1>
+        </>
+    );
+}
+
+export default HomePageContents;
