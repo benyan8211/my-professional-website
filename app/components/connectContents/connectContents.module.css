@@ -1,0 +1,12 @@
+.connectText {
+    font-family: 'Google Sans Flex';
+    align-self: center;
+    font-size: 20px;
+    padding-top: 25px;
+    overflow-wrap: break-word;
+    max-width: 60%;
+}
+
+.connectCardContainer {
+    display: flex
+}

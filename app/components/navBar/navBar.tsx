@@ -1,5 +1,4 @@
 import { Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from "flowbite-react";
-import Link from "next/link";
 import styles from "./navBar.module.css";
 
 interface MyWebsiteNavBarProps {

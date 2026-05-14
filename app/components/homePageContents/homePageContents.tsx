@@ -2,7 +2,6 @@ import Image from 'next/image'
 import myProfessionalPicture from "../../assets/professional_picture.jpg";
 import styles from "./homePageContents.module.css";
 
-
 const HomePageContents = () => {
     return (
         <>
@@ -17,7 +16,7 @@ const HomePageContents = () => {
                     />
                 </div>
             </div>
-            <h1 className={styles.homePageSubHeading}>Professional software developer • AI hobbyist • Continuous learner</h1>
+            <div className={styles.homePageSubHeading}>Professional software developer • AI hobbyist • Continuous learner</div>
         </>
     );
 }

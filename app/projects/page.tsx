@@ -1,10 +1,11 @@
 import MyWebsiteNavBar from "../components/navBar/navBar";
+import ProjectsContents from '../components/projectsContents/projectsContents';
 
 export default function AboutPage() {
     return (
         <>
             <MyWebsiteNavBar activeTab={'projects'} />
-            <div>This page is under construction</div>
+            <ProjectsContents />
         </>
     );
 }
