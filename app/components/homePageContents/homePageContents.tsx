@@ -16,7 +16,7 @@ const HomePageContents = () => {
                     />
                 </div>
             </div>
-            <div className={styles.homePageSubHeading}>Professional software developer • AI hobbyist • Continuous learner</div>
+            <div className={styles.homePageSubHeading}>Software developer • AI hobbyist • Continuous learner</div>
         </>
     );
 }
