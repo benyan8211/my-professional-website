@@ -1,0 +1,13 @@
+.articleText {
+    font-family: 'Google Sans Flex';
+}
+
+.backToCompendiumMainPageLink {
+    display: flex;
+    align-self: center;
+    margin-top: 15px;
+}
+
+.backToCompendiumMainPageText {
+    padding-left: 6px;
+}

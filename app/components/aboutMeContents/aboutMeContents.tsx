@@ -48,7 +48,7 @@ const AboutMeContents = () => {
                 </div>
             </div>
             <div className={styles.aboutMeText}>I am a software developer with 7+ years of experience. I have worked in full-stack development positions across 3 companies, building RESTful API services using Spring Boot and NodeJS connected to MongoDB and DynamoDB databases and front end web interfaces using React and Next. I built this website using Next Typescript and it is hosted on AWS using AWS Amplify.</div>
-            <div className={styles.aboutMeText}>In my free time, I enjoy learning about new concepts in technical areas like Artificial Intelligence and leveraging new insights to build scalable solutions. I have built applications using OpenAI API SDK, LangGraph, and Pydantic AI. You can try out live demonstrations of some of my applications in the <em>Projects</em> tab.</div>
+            <div className={styles.aboutMeText}>In my free time, I enjoy learning about new concepts in technical areas like Artificial Intelligence and leveraging new insights to build scalable solutions. I have documented a few key ideas from my learning in the <em>Compendium</em> tab. I have built applications using OpenAI API SDK, LangGraph, and Pydantic AI. Try out live demonstrations of some of my applications in the <em>Projects</em> tab.</div>
         </>
     );
 }

@@ -1,0 +1,60 @@
+---
+title: "What is a Data Structure?"
+date: "2026-05-16"
+description: "Overview on what is a data structure"
+---
+
+import ArrayImage from '../app/assets/array.png'
+
+# What is a Data Structure?
+
+A <em>Data Structure</em> is a specialized format for organizing, processing and storing data efficiently.
+<br />
+Choosing the correct data structure for a given problem is critical, as it directly impacts performance, speed, and memory usage of the solution.
+<br />
+
+## Overview of commonly used data structures
+<br/>
+
+**<u>Array:</u>**&nbsp;&nbsp;An array is a fixed size collection of elements of an identical data type that is stored in a contiguous section in
+memory. They use numerical indices to access elements starting with 0, so for example 0, 1, 2, ... Suppose an array has <em>n</em> elements.
+The time complexity of random access of an element is <em>O(1)</em>, because since an array is stored in a contiguous block of memory and
+contains elements of the same size, the computer can find the specific location of the element in question in a trivial amount of time.
+The space complexity is <em>O(n)</em> since you have <em>n</em> elements.
+<br />
+![Image of array](/array.png)
+<br />
+**<u>Linked List:</u>**&nbsp;&nbsp;A linked list is a variable size sequence of nodes. Each node contains data and a pointer 
+to another node or null. The data of each node in a linked list is of the same data type. The first node of a linked list is 
+called the head node. The last node of a linked list is called the tail node. Usually in a computer program, there is only a 
+pointer to the head node. Suppose a linked list has <em>n</em> nodes. To insert a new node at the head position, 
+it takes <em>O(1)</em> time complexity, because the program has a pointer to the head node. To insert a node at any other 
+position, it takes <em>O(n)</em> time complexity, because the program needs to traverse the linked list one by one to
+find the correct position to perform the insert. 
+The same applies to deletion. If you wanted to delete the node at the head position, it takes <em>O(1)</em> time complexity,
+because the program has a pointer to the head node. If you wanted to delete a node at any other position, 
+it takes <em>O(n)</em> time complexity, because the program needs to traverse the linked list one by one to
+find the correct position to perform the delete. The space complexity is <em>O(n)</em>, because you have <em>n</em> nodes.
+<br />
+![Image of linked list](/linked-list.png)
+<br />
+**<u>Stack:</u>**&nbsp;&nbsp;A stack is a sequence of elements that adheres to the Last In First Out (LIFO) principle.
+This means that the last element to be added onto a stack is also the first element to be removed, similar to a physical stack
+of plates, where you only add to or take from the very top of the stack. The operation to add a new element to the top of the 
+stack is called <em>push</em>. The operation to remove the top element from the stack is called <em>pop</em>. The operation
+to view the data value of the element at the top of the stack is called <em>peek</em>. Suppose a stack has <em>n</em> elements.
+Since a program has a pointer to the top element of the stack, the time complexity to push, pop, or peek is always <em>O(1)</em>.
+The space complexity is <em>O(n)</em> since the stack has <em>n</em> elements.
+<br />
+![Image of stack](/stack.png)
+<br />
+**<u>Queue:</u>**&nbsp;&nbsp;A queue is a sequence of elements that adheres to the First In First Out (FIFO) principle. 
+This means that the first element to be added into the queue is also the first element to be removed from the queue, similar to a line
+of people waiting at a grocery store checkout. The first person to enter the line is also the first person to be served.
+The operation to add a new element to the end of a queue is called <em>enqueue</em>. The operation to remove the element at the
+beginning of a queue is called <em>dequeue</em>. The operation to view the data of the element at the beginning of the queue 
+is called <em>peek</em>. Suppose a queue has <em>n</em> elements. Because of efficient use of pointers/indices 
+at the beginning and end of a queue, enqueue, dequeue, and peek operations take <em>O(1)</em> time complexity. The space complexity
+is <em>O(n)</em> since the queue has <em>n</em> elements.
+<br />
+![Image of queue](/queue.png)

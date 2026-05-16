@@ -14,6 +14,7 @@ const MyWebsiteNavBar = ({ activeTab }: MyWebsiteNavBarProps) => {
             <NavbarToggle />
             <NavbarCollapse>
                 <NavbarLink className={styles.navBarFont} active={activeTab === 'about-me'} href="/about-me">About Me</NavbarLink>
+                <NavbarLink className={styles.navBarFont} active={activeTab === 'compendium'} href="/compendium">Compendium</NavbarLink>
                 <NavbarLink className={styles.navBarFont} active={activeTab === 'projects'} href="/projects">Projects</NavbarLink>
                 <NavbarLink className={styles.navBarFont} active={activeTab === 'connect'} href="/connect">Connect</NavbarLink>
             </NavbarCollapse>
