@@ -1,6 +1,5 @@
 import MyWebsiteNavBar from '@/app/components/navBar/navBar';
 import dynamic from 'next/dynamic';
-import { notFound } from 'next/navigation';
 import { ComponentType } from 'react';
 import styles from './page.module.css';
 import Link from 'next/link';
@@ -15,7 +14,6 @@ interface PageProps {
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
 
-  // Dynamically import the MDX file based on the slug URL parameter
   const MdxPost: ComponentType = dynamic(
     () => import(`../../../compendiumDocuments/${slug}.mdx`)
   );

@@ -9,7 +9,6 @@ interface ClickableCardProps {
     url: string,
 }
 
-
 const ClickableCard = ({image, text, url}: ClickableCardProps) => {
     return (
         <Link href={url} target="_blank" rel="noopener noreferrer" className="group relative block w-80 h-48 overflow-hidden rounded-xl p-4">

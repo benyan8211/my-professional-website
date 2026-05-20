@@ -11,7 +11,6 @@ export function getAllPosts() {
     const slug = fileName.replace('.mdx', '');
     const fileContent = fs.readFileSync(path.join(contentPath, fileName), 'utf8');
     
-    // Parse frontmatter metadata
     const { data, content } = matter(fileContent);
     
     return {

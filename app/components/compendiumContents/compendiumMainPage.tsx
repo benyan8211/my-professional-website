@@ -1,6 +1,5 @@
 import { getAllPosts } from "./compendiumHelpers";
 import Link from 'next/link';
-import styles from './compendiumContents.module.css';
 
 const CompendiumMainPage = () => {
     const posts = getAllPosts();
