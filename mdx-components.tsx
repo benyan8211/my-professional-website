@@ -8,12 +8,26 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h2: ({ children }) => (
         <h2 className="text-2xl font-bold tracking-tight">{children}</h2>
     ),
+    h3: ({ children }) => (
+      <h3 className="text-xl font-bold tracking-tight">{children}</h3>
+    ),
     img: (props) => (
       <Image
         width={500}
         height={500}
         {...(props as any)}
       />
+    ),
+    table: ({ children }) => (
+      <div className="my-6 w-full overflow-y-auto">
+        <table className="w-full border-collapse text-sm">{children}</table>
+      </div>
+    ),
+    th: ({ children }) => (
+      <th className="border px-4 py-3 text-left font-bold bg-muted">{children}</th>
+    ),
+    td: ({ children }) => (
+      <td className="border px-4 py-3 text-left">{children}</td>
     ),
     ...components,
   }

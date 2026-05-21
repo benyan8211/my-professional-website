@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 import withFlowbiteReact from "flowbite-react/plugin/nextjs";
 import createMDX from '@next/mdx';
-import remarkFrontmatter from 'remark-frontmatter'
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -11,7 +10,7 @@ const nextConfig: NextConfig = {
 const withMDX = createMDX({
   options: {
     // Add remark-frontmatter to parse/strip frontmatter
-    remarkPlugins: ['remark-frontmatter']
+    remarkPlugins: ['remark-frontmatter', 'remark-gfm']
   },
 })
 
