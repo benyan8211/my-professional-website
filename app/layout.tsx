@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Google_Sans_Flex } from "next/font/google";
+import 'katex/dist/katex.min.css';
 import "./globals.css";
 
 const googleSansFlex = Google_Sans_Flex({

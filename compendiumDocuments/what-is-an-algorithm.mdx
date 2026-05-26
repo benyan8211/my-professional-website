@@ -1,0 +1,138 @@
+---
+title: "What is an Algorithm?"
+date: "2026-05-18"
+description: "Overview on what is an algorithm"
+---
+
+import '../app/globals.css';
+
+# What is an Algorithm?
+
+An <em>Algorithm</em> is a step-by-step logical procedure used to solve a problem.
+<br />
+## Key Types of Algorithms
+<br />
+**<u>Recursion:</u>**&nbsp;&nbsp;a type of algorithm where a function calls itself with different parameters 
+for each call to itself until it reaches a base case.
+<br />
+**<u>Divide and Conquer:</u>**&nbsp;&nbsp;a type of algorithm that continuously breaks a problem down into smaller, 
+sub-problems of the same type, solves those sub-problems, and combines their solutions.
+<br />
+**<u>Greedy:</u>**&nbsp;&nbsp;a type of algorithm that builds a solution step-by-step; at each step of the algorithm, the
+algorithm, faced with a number of options, will pick the option that appears the best at that moment. The goal is to reach
+a globally optimal solution through a series of local optimizations.
+<br />
+**<u>Dynamic Programming:</u>**&nbsp;&nbsp;a type of algorithm that breaks a problem into smaller sub-problems, then
+solves each sub-problem only once, and stores the solution of each sub-problem in a data structure.
+<br />
+## Mathematical Problems
+<br />
+### ⚜️&nbsp;&nbsp;GCD of Two Numbers
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given two numbers a and b, develop an efficient algorithm to find the greatest common divisor (GCD)
+between these two numbers.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we will use the Euclidean Algorithm.
+<br />
+The Euclidean Alogrithm states that given two natural numbers $a$ and $b$, take the max of the two,
+call it $greater\_number$, and take the min of the two and call it $smaller\_number$. 
+Then $gcd(greater\_number, smaller\_number) = gcd(smaller\_number, greater\_number \pmod{smaller\_number})$.
+The algorithm repeats this process until the value of $smaller\_number = 0$.
+<br />
+I have implemented the Euclidean Algorithm using recursion:
+<br />
+```python showLineNumbers
+# Recursive Solution
+class Solution:
+    def gcd(self, a: int, b: int) -> int:
+        greater_number = max(a, b) 
+        smaller_number = min(a, b)
+
+        if smaller_number == 0:
+            return greater_number
+        
+        return self.gcd(smaller_number, greater_number % smaller_number)
+```
+<br />
+$Time\;Complexity: O(log(min(greater\_number, smaller\_number)))$
+<br />
+**Explanation:**
+<br />
+- **The "Modulo" Reduction:** Taking a modulo ensures the result is strictly less than half of the original divisor. In other words
+$a \pmod{b} < b/2$.
+- **Worst-Case Scenario (Lamé's Theorem):** The worst-case performance occurs when the inputs are consecutive Fibonacci numbers.
+The recursion tree will be higher than in other cases because you need to perform more operations before getting to the 
+$gcd$ value of $1$. The height of the recursion tree is in the worst case 
+is directly proportional to the logarithm of the minimum of $greater\_number, smaller\_number$. 
+- **Hence,** the big O time 
+complexity is: $O(log(min(greater\_number, smaller\_number)))$.
+<br />
+$Space\;Complexity: O(log(min(greater\_number, smaller\_number)))$
+<br />
+**Explanation:**
+<br />
+- **Stack Frame:** A new stack frame is created for each recursive call, and the total memory required is proportional 
+to the number of recursive calls.
+- **Worst-Case Scenario (Lamé's Theorem):** The worst-case performance occurs when the inputs are consecutive Fibonacci numbers.
+The recursion tree will be higher than in other cases because you need to perform more operations before getting to the 
+$gcd$ value of $1$. The height of the recursion tree is in the worst case 
+is directly proportional to the logarithm of the minimum of $greater\_number, smaller\_number$. 
+- **Hence,** the big O space 
+complexity is: $O(log(min(greater\_number, smaller\_number)))$.
+<br />
+I have also implemented the Euclidean Algorithm iteratively:
+<br />
+```python showLineNumbers
+# Iterative Solution
+class Solution:
+    def gcd(self, a: int, b: int) -> int:
+        greater_number = max(a, b) 
+        smaller_number = min(a, b)
+
+        while smaller_number != 0:
+            greater_number_previous = greater_number
+            greater_number = smaller_number
+            smaller_number = greater_number_previous % smaller_number
+        
+        return greater_number
+```
+<br />
+$Time\;Complexity: O(log(min(greater\_number, smaller\_number)))$
+<br />
+**Explanation:**
+<br />
+- **The "Modulo" Reduction:** Taking a modulo ensures the result is strictly less than half of the original divisor. In other words
+$a \pmod{b} < b/2$.
+- **Worst-Case Scenario (Lamé's Theorem):** The worst-case performance occurs when the inputs are consecutive Fibonacci numbers.
+The recursion tree will be higher than in other cases because you need to perform more operations before getting to the 
+$gcd$ value of $1$. The height of the recursion tree is in the worst case 
+is directly proportional to the logarithm of the minimum of $greater\_number, smaller\_number$. 
+- **Hence,** the big O time 
+complexity is: $O(log(min(greater\_number, smaller\_number)))$.
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. 
+- **Hence,** the big O time 
+complexity is: $O(1)$.
+<br />
+## Bitwise Algorithms
+
+## List Algorithms
+
+## Sorting Algorithms
+
+## Tree Algorithms
+
+## Heap Algorithms
+
+## Graph Algorithms
+
+## Backtracking Algorithms
+
+## Dynamic Programming Algorithms
+
+

@@ -1,5 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
 import Image from 'next/image';
+import './app/globals.css';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -29,6 +30,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     td: ({ children }) => (
       <td className="border px-4 py-3 text-left">{children}</td>
     ),
+    ul: (props: any) => <ul className="list-disc pl-5" {...props} />,
+    li: (props: any) => <li className="mb-1" {...props} />,
     ...components,
   }
 }

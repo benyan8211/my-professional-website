@@ -4,8 +4,6 @@ date: "2026-05-17"
 description: "Overview on what is a data structure"
 ---
 
-import ArrayImage from '../app/assets/array.png'
-
 # What is a Data Structure?
 
 A <em>Data Structure</em> is a specialized format for organizing, processing and storing data efficiently.
@@ -17,25 +15,25 @@ Choosing the correct data structure for a given problem is critical, as it direc
 <br/>
 
 **<u>Array:</u>**&nbsp;&nbsp;An array is a fixed size collection of elements of an identical data type that is stored in a contiguous section in
-memory. They use numerical indices to access elements starting with 0, so for example 0, 1, 2, ... Suppose an array has <em>n</em> elements.
-The time complexity of random access of an element is <em>O(1)</em>, because since an array is stored in a contiguous block of memory and
+memory. They use numerical indices to access elements starting with $0$, so for example $0$, $1$, $2$, $...$ Suppose an array has $n$ elements.
+The time complexity of random access of an element is $O(1)$, because since an array is stored in a contiguous block of memory and
 contains elements of the same size, the computer can access any random element in a trivial amount of time.
-The space complexity is <em>O(n)</em> since you have <em>n</em> elements.
+The space complexity is $O(n)$ since you have $n$ elements.
 <br />
 ![Image of array](/array.png)
 <br />
 **<u>Linked List:</u>**&nbsp;&nbsp;A linked list is a variable size sequence of nodes. Each node contains data and a pointer 
 to another node or null. The data of each node in a linked list is of the same data type. The first node of a linked list is 
 called the head node. The last node of a linked list is called the tail node. Usually in a computer program, there is only a 
-pointer to the head node. Suppose a linked list has <em>n</em> nodes. To insert a new node at the head position, 
-it takes <em>O(1)</em> time complexity, because the program has a pointer to the head node. To insert a node at any other 
-position, it takes <em>O(n)</em> time complexity, because the program needs to traverse the linked list one by one to
+pointer to the head node. Suppose a linked list has $n$ nodes. To insert a new node at the head position, 
+it takes $O(1)$ time complexity, because the program has a pointer to the head node. To insert a node at any other 
+position, it takes $O(n)$ time complexity, because the program needs to traverse the linked list one by one to
 find the correct position to perform the insert. 
-The same applies to deletion. If you wanted to delete the node at the head position, it takes <em>O(1)</em> time complexity,
+The same applies to deletion. If you wanted to delete the node at the head position, it takes $O(1)$ time complexity,
 because the program has a pointer to the head node. If you wanted to delete a node at any other position, 
-it takes <em>O(n)</em> time complexity, because the program needs to traverse the linked list one by one to
+it takes $O(n)$ time complexity, because the program needs to traverse the linked list one by one to
 find the correct position to perform the delete. 
-The space complexity is <em>O(n)</em>, because you have <em>n</em> nodes.
+The space complexity is $O(n)$, because you have $n$ nodes.
 <br />
 ![Image of linked list](/linked-list.png)
 <br />
@@ -43,9 +41,9 @@ The space complexity is <em>O(n)</em>, because you have <em>n</em> nodes.
 This means that the last element to be added onto a stack is also the first element to be removed, similar to a physical stack
 of plates, where you only add to or take from the very top of the stack. The operation to add a new element to the top of the 
 stack is called <em>push</em>. The operation to remove the top element from the stack is called <em>pop</em>. The operation
-to view the data value of the element at the top of the stack is called <em>peek</em>. Suppose a stack has <em>n</em> elements.
-Since a program has a pointer to the top element of the stack, the time complexity to push, pop, or peek is always <em>O(1)</em>.
-The space complexity is <em>O(n)</em> since the stack has <em>n</em> elements.
+to view the data value of the element at the top of the stack is called <em>peek</em>. Suppose a stack has $n$ elements.
+Since a program has a pointer to the top element of the stack, the time complexity to push, pop, or peek is always $O(1)$.
+The space complexity is $O(n)$ since the stack has $n$ elements.
 <br />
 ![Image of stack](/stack.png)
 <br />
@@ -54,9 +52,9 @@ This means that the first element to be added into the queue is also the first e
 of people waiting at a grocery store checkout. The first person to enter the line is also the first person to be served.
 The operation to add a new element to the end of a queue is called <em>enqueue</em>. The operation to remove the element at the
 front of a queue is called <em>dequeue</em>. The operation to view the data of the element at the front of the queue 
-is called <em>peek</em>. Suppose a queue has <em>n</em> elements. Because of efficient use of pointers/indices 
-at the beginning and end of a queue, enqueue, dequeue, and peek operations take <em>O(1)</em> time complexity.
-The space complexity is <em>O(n)</em> since the queue has <em>n</em> elements.
+is called <em>peek</em>. Suppose a queue has $n$ elements. Because of efficient use of pointers/indices 
+at the beginning and end of a queue, enqueue, dequeue, and peek operations take $O(1)$ time complexity.
+The space complexity is $O(n)$ since the queue has $n$ elements.
 <br />
 ![Image of queue](/queue.png)
 <br />
@@ -66,11 +64,11 @@ also called a hash code, into an array of buckets or slots, which the program tr
 after being transformed by the hash function, map to the same value, this is called a <em>hash table collision</em>. This is a problem
 because the hash table can only hold one value per slot. One solution to this problem is to implement <em>separate chaining</em>. 
 Instead of storing a single value for each key, each key will point to an array or linked list of all of the items that hash to that value.
-Suppose a hash table has <em>n</em> elements. Because of the possibility of all items hashing into the same bucket, inserting a new item 
-into the hash table is <em>O(n)</em> time complexity. This is because when doing the insertion, the program needs to traverse the entire 
-linked list or array to see if there are any duplicates. Deletion takes <em>O(n)</em> time complexity. If all items hash into the same bucket, 
-the program will need to traverse through all of the elements before finding the element to delete. The space complexity is <em>O(n)</em> 
-since the hash table has <em>n</em> elements.
+Suppose a hash table has $n$ elements. Because of the possibility of all items hashing into the same bucket, inserting a new item 
+into the hash table is $O(n)$ time complexity. This is because when doing the insertion, the program needs to traverse the entire 
+linked list or array to see if there are any duplicates. Deletion takes $O(n)$ time complexity. If all items hash into the same bucket, 
+the program will need to traverse through all of the elements before finding the element to delete. The space complexity is $O(n)$
+since the hash table has $n$ elements.
 <br />
 ![Image of hash table](/hash-table.png)
 <br />
@@ -93,44 +91,44 @@ of a parent have a value that is greater than or equal to that of the parent. A 
 its configuration such that its height is as small as possible. This ensures that the tree has a "balanced" appearance,
 where the number of nodes in the left subtree is roughly the same as the number of nodes in the right subtree. This prevents the tree from
 becoming "skewed", where the majority of the nodes are only on one side of the tree, resulting in a flat, linear configuration. 
-Suppose a tree has <em>n</em> nodes. The time complexity to insert or delete a node in a Generic Tree is <em>O(n)</em> because you need 
+Suppose a tree has $n$ nodes. The time complexity to insert or delete a node in a Generic Tree is $O(n)$ because you need 
 to traverse all of the nodes to find the correct insertion/deletion point. The time complexity to insert or delete a node in a Binary Tree 
-is also <em>O(n)</em> because you need to traverse all of the nodes to find the correct insertion/deletion point. 
-The time complexty to insert or delete a node in a Binary Search Tree (BST) is <em>O(n)</em> because in the case where the tree is completely 
+is also $O(n)$ because you need to traverse all of the nodes to find the correct insertion/deletion point. 
+The time complexty to insert or delete a node in a Binary Search Tree (BST) is $O(n)$ because in the case where the tree is completely 
 skewed to one side, you need to traverse all of the nodes to find the corrrect insertion/deletion point. 
-For BST, the average case time complexity for insertion/deletion is 𝚯(log n), because in the average case, the BST is relatively well balanced, 
-and that means that the height of the tree is proportional to the logarithm of n. 
-The time complexity to insert or delete a node in a Balanced Tree is O(log n), because in a tree that is well balanced, 
-the height of tree is proportional to the logarithm of n. The space complexity for all of these types of tree is <em>O(n)</em>,
-because there are <em>n</em> nodes in the tree.
+For BST, the average case time complexity for insertion/deletion is $\Theta(log\;n)$, because in the average case, the BST is relatively well balanced, 
+and that means that the height of the tree is proportional to the logarithm of $n$. 
+The time complexity to insert or delete a node in a Balanced Tree is $O(log\;n)$, because in a tree that is well balanced, 
+the height of tree is proportional to the logarithm of $n$. The space complexity for all of these types of tree is $O(n)$,
+because there are $n$ nodes in the tree.
 <br />
 ![Image of tree](/tree.png)
 <br />
 **<u>Heap:</u>**&nbsp;&nbsp;A heap is a complete binary tree data structure. A <em>complete</em> binary tree means that every level of the
 tree is filled with the exception of the last level. And the last level is filled from left to right. A heap also must satisfy the heap
 property:  in a min-heap, the value of each child is greater than or equal to its parent, and in a max-heap, the value of each child 
-is less than or equal to its parent. Heaps are typically implemented as arrays. For any node at index <em>i</em>, the left child is at
-index <em>2i + 1</em>, and the right child is at <em>2i + 2</em>. The parent, if the current node is not the root, is at index<br/>
-<em>⌊(i - 1) / 2⌋</em>. Suppose you have a heap with <em>n</em> elements. 
+is less than or equal to its parent. Heaps are typically implemented as arrays. For any node at index $i$, the left child is at
+index $2i + 1$, and the right child is at $2i + 2$. The parent, if the current node is not the root, is at index 
+$⌊(i - 1) / 2⌋$. Suppose you have a heap with $n$ elements. 
 The main operations of a heap are: insert, peek, extract-min/extract-max, and heapify. The process of 
 insertion is to add the new element to the next available empty slot in the heap, and then "bubble-up" that element to its correct 
 position. The node is compared with its parent, if it violates the heap property, a swapping occurs. This process repeats until the 
 element no longer violates the heap property. The time complexity of insertion is dependent on the height of the heap. Since a heap
-is a complete binary tree, that is also perfectly balanced, the time complexity of insertion is <em>O(log n)</em>. The peek operation
-takes <em>O(1)</em> time complexity because the min or max of the heap is always located at the root of the heap, in a fixed position.
+is a complete binary tree, that is also perfectly balanced, the time complexity of insertion is $O(log\;n)$. The peek operation
+takes $O(1)$ time complexity because the min or max of the heap is always located at the root of the heap, in a fixed position.
 So getting the value of that element takes a trivial amount of time. The Extract-Min/Extract-Max operation is where you remove the 
 root from the heap and record its value, take the bottom most node and make it the root. The root now most likely violates the heap
 property and so there is a "bubble-down" process where the root is compared with its children and in the case of a min heap, the root
 is swapped with the smaller child, in a max heap the root is swapped with the larger child and this process repeats until the node no longer
-violates the heap property. The Extract-Min/Extract-Max operation takes <em>O(log n)</em> time complexity because the part of the process
+violates the heap property. The Extract-Min/Extract-Max operation takes $O(log\;n)$ time complexity because the part of the process
 that takes the most work is the "bubble-down" part, and that requires traversing the height of the heap; and since a heap is a complete
 binary tree and is perfectly balanced, the height of the heap is proportional to the logarithm of n. The heapify operation turns an 
 unordered array of elements into a heap such that every element adheres to the heap property. The heapify operation does a "bubble-down"
-operation for every element in the heap that has at least one child node. The heapify operation takes <em>O(n)</em> time complexity because
+operation for every element in the heap that has at least one child node. The heapify operation takes $O(n)$ time complexity because
 the amount of work required for each element decreases as you move down the heap, with the majority of the elements near the bottom of the heap.
-A single "bubble-down" operation of an element of height <em>h</em> takes <em>O(h)</em> time. If you sum up all heights of all elements in
-the heap, the sum of heights converges to linear, so <em>O(n)</em>. The space complexity of a heap is <em>O(n)</em>, because there are
-<em>n</em> elements in a heap.
+A single "bubble-down" operation of an element of height $h$ takes $O(h)$ time. If you sum up all heights of all elements in
+the heap, the sum of heights converges to linear, so $O(n)$. The space complexity of a heap is $O(n)$ because there are
+$n$ elements in a heap.
 <br />
 ![Image of min heap](/min-heap.png)
 <br />
@@ -149,19 +147,19 @@ A cell contains a boolean (true/false) value indicating if an edge connects the 
 A weighted graph is a type of graph where each edge is assigned a numerical value called a weight.
 Weighted graphs are implemented slightly differently. They also use an adjacency matrix, but instead of storing
 boolean values in the cells, they store the weights. If there is no direct edge exists between two vertices,
-the corresponding cell will contain either 0 or ∞ depending on the specific implementation.
+the corresponding cell will contain either $0$ or $∞$ depending on the specific implementation.
 Common operations include add/remove a vertex and add/remove an edge. The operation to add/remove a vertex 
-is <em>O(V²)</em>, where <em>V</em> is the number of vertices in the graph. When you add/remove a vertex, you
-need to resize the adjacency matrix, which requires creating an adjacency matrix of size <em>(V + 1)•(V + 1)</em>
-if you are adding a vertex and an adjacency matrix of size <em>(V - 1)•(V - 1)</em> if you are removing a vertex.
+is $O(V²)$, where $V$ is the number of vertices in the graph. When you add/remove a vertex, you
+need to resize the adjacency matrix, which requires creating an adjacency matrix of size $(V + 1)•(V + 1)$
+if you are adding a vertex and an adjacency matrix of size $(V - 1)•(V - 1)$ if you are removing a vertex.
 And then copying the unaffected values into the new adjacency matrix, which is a quadratic operation, hence 
-the time complexity is <em>O(V²)</em>. The operation to add/remove an edge is <em>O(1)</em>. To add an edge,
+the time complexity is $O(V²)$. The operation to add/remove an edge is $O(1)$. To add an edge,
 simply locate the cell in the adjancency matrix using indices and change it's value to true. 
 Similarly, to remove an edge, simply locate the cell in the adjancency matrix using indices and change it's value to false.
 Since the adjacency matrix is just a two dimensional array, which is stored in a contiguous block of memory and
 contains elements of the same size, the computer can access any random element in a trivial amount of time. Hence, the 
-time complexity to add/remove an edge is <em>O(1)</em>. The space complexity of a graph is O(V²), because the size of the 
-adjacency matrix is V•V.
+time complexity to add/remove an edge is $O(1)$. The space complexity of a graph is $O(V²)$, because the size of the 
+adjacency matrix is $V•V$.
 <br />
 ![Image of graph](/graph.png)
 <br />
