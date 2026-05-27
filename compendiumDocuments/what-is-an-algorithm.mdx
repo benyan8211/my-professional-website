@@ -34,10 +34,9 @@ between these two numbers.
 <br />
 **<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we will use the Euclidean Algorithm.
 <br />
-The Euclidean Alogrithm states that given two natural numbers $a$ and $b$, take the max of the two,
-call it $greater\_number$, and take the min of the two and call it $smaller\_number$. 
-Then $gcd(greater\_number, smaller\_number) = gcd(smaller\_number, greater\_number \pmod{smaller\_number})$.
-The algorithm repeats this process until the value of $smaller\_number = 0$.
+The Euclidean Alogrithm states that given two natural numbers $a$ and $b$, 
+$gcd(a, b) = gcd(b, a \pmod{b})$.
+The algorithm repeats this process until the value of $b = 0$.
 <br />
 I have implemented the Euclidean Algorithm using recursion:
 <br />
@@ -45,40 +44,64 @@ I have implemented the Euclidean Algorithm using recursion:
 # Recursive Solution
 class Solution:
     def gcd(self, a: int, b: int) -> int:
-        greater_number = max(a, b) 
-        smaller_number = min(a, b)
-
-        if smaller_number == 0:
-            return greater_number
+        if b == 0:
+            return a
         
-        return self.gcd(smaller_number, greater_number % smaller_number)
+        return self.gcd(b, a % b)
 ```
 <br />
-$Time\;Complexity: O(log(min(greater\_number, smaller\_number)))$
+$Time\;Complexity: O(log(min(a, b)))$
 <br />
 **Explanation:**
 <br />
-- **The "Modulo" Reduction:** Taking a modulo ensures the result is strictly less than half of the original divisor. In other words
-$a \pmod{b} < b/2$.
-- **Worst-Case Scenario (Lamé's Theorem):** The worst-case performance occurs when the inputs are consecutive Fibonacci numbers.
-The recursion tree will be higher than in other cases because you need to perform more operations before getting to the 
-$gcd$ value of $1$. The height of the recursion tree is in the worst case 
-is directly proportional to the logarithm of the minimum of $greater\_number, smaller\_number$. 
-- **Hence,** the big O time 
-complexity is: $O(log(min(greater\_number, smaller\_number)))$.
+- **The numbers** shrink by at least half at least every two steps.
+- **Start:** We begin with the pair $(a, b)$.
+- **Step 1:** The new pair becomes $(b, a \pmod{b})$. Let's call the result of $[a \pmod{b}] \rightarrow r_1$. 
+So the new pair then becomes $(b, r_1)$.
+- **Step 2:** The new pair becomes $(r_1, b \pmod{r_1})$. Let's call the result of $[b \pmod{r_1}] \rightarrow r_2$.
+So the new pair then becomes $(r_1, r_2)$.
+- We want to prove that $r_1 < \frac{a}{2}$.
+- **Case A:** $b <= \frac{a}{2}$. Since $r_1$ is a remainder of a division between $a$ and $b$, 
+we can state that $r_1 < b$ and we know that $b <= \frac{a}{2}$; therefore, $r_1 < \frac{a}{2}$.
+- **Case B:** $b > \frac{a}{2}$. If $b$ is more than half of $a$, we can state that $b$ can only fit into $a$ exactly one time.
+Therefore, the remainder is just the difference: $r_1 = a - b$. Since $b > \frac{a}{2}$, subtracting a number larger than half
+of $a$ leaves the result smaller than half of $a$. Therefore, $r_1 < \frac{a}{2}$.
+- Therefore, the first number in our pair $a$, always drops to less than half of its size every two steps.
+- If you start with a number $X$, you can divide it by 2 a maximum of $log_2(X)$ times before it hits $1$.
+- Since it takes a maximum of two steps for guarantee a halving, the maximum number of steps is $2 • log_2(X)$.
+- $X$ can be replaced with $min(a,b)$ because the remainder $r$ must always be less than the minimum of the two inputs 
+in a division, and so since the remainder $r$ replaces one of the input values, with the other input value being the next 
+modulo operation which is less than $r$, $r$ is upper bounded by the minimum of $a$ and $b$.
+- **Hence,** the big $O$ time 
+complexity is: $O(log(min(a, b)))$.
 <br />
-$Space\;Complexity: O(log(min(greater\_number, smaller\_number)))$
+$Space\;Complexity: O(log(min(a, b)))$
 <br />
 **Explanation:**
 <br />
 - **Stack Frame:** A new stack frame is created for each recursive call, and the total memory required is proportional 
 to the number of recursive calls.
-- **Worst-Case Scenario (Lamé's Theorem):** The worst-case performance occurs when the inputs are consecutive Fibonacci numbers.
-The recursion tree will be higher than in other cases because you need to perform more operations before getting to the 
-$gcd$ value of $1$. The height of the recursion tree is in the worst case 
-is directly proportional to the logarithm of the minimum of $greater\_number, smaller\_number$. 
-- **Hence,** the big O space 
-complexity is: $O(log(min(greater\_number, smaller\_number)))$.
+- **The numbers** shrink by at least half at least every two steps.
+- **Start:** We begin with the pair $(a, b)$.
+- **Step 1:** The new pair becomes $(b, a \pmod{b})$. Let's call the result of $[a \pmod{b}] \rightarrow r_1$. 
+So the new pair then becomes $(b, r_1)$.
+- **Step 2:** The new pair becomes $(r_1, b \pmod{r_1})$. Let's call the result of $[b \pmod{r_1}] \rightarrow r_2$.
+So the new pair then becomes $(r_1, r_2)$.
+- We want to prove that $r_1 < \frac{a}{2}$.
+- **Case A:** $b <= \frac{a}{2}$. Since $r_1$ is a remainder of a division between $a$ and $b$, 
+we can state that $r_1 < b$ and we know that $b <= \frac{a}{2}$; therefore, $r_1 < \frac{a}{2}$.
+- **Case B:** $b > \frac{a}{2}$. If $b$ is more than half of $a$, we can state that $b$ can only fit into $a$ exactly one time.
+Therefore, the remainder is just the difference: $r_1 = a - b$. Since $b > \frac{a}{2}$, subtracting a number larger than half
+of $a$ leaves the result smaller than half of $a$. Therefore, $r_1 < \frac{a}{2}$.
+- Therefore, the first number in our pair $a$, always drops to less than half of its size every two steps.
+- If you start with a number $X$, you can divide it by 2 a maximum of $log_2(X)$ times before it hits $1$.
+- Since it takes a maximum of two steps for guarantee a halving, the maximum number of steps is $2 • log_2(X)$.
+- $X$ can be replaced with $min(a,b)$ because the remainder $r$ must always be less than the minimum of the two inputs 
+in a division, and so since the remainder $r$ replaces one of the input values, with the other input value being the next 
+modulo operation which is less than $r$, $r$ is upper bounded by the minimum of $a$ and $b$.
+- **Therefore,** the height of the recursion tree is upper bounded by the $2•log_2(min(a, b))$.
+- **Hence,** the big $O$ space 
+complexity is: $O(log(min(a, b)))$.
 <br />
 I have also implemented the Euclidean Algorithm iteratively:
 <br />
@@ -86,29 +109,38 @@ I have also implemented the Euclidean Algorithm iteratively:
 # Iterative Solution
 class Solution:
     def gcd(self, a: int, b: int) -> int:
-        greater_number = max(a, b) 
-        smaller_number = min(a, b)
-
-        while smaller_number != 0:
-            greater_number_previous = greater_number
-            greater_number = smaller_number
-            smaller_number = greater_number_previous % smaller_number
+        while b != 0:
+            a_previous = a
+            a = b
+            b = a_previous % b
         
-        return greater_number
+        return a
 ```
 <br />
-$Time\;Complexity: O(log(min(greater\_number, smaller\_number)))$
+$Time\;Complexity: O(log(min(a, b)))$
 <br />
 **Explanation:**
 <br />
-- **The "Modulo" Reduction:** Taking a modulo ensures the result is strictly less than half of the original divisor. In other words
-$a \pmod{b} < b/2$.
-- **Worst-Case Scenario (Lamé's Theorem):** The worst-case performance occurs when the inputs are consecutive Fibonacci numbers.
-The recursion tree will be higher than in other cases because you need to perform more operations before getting to the 
-$gcd$ value of $1$. The height of the recursion tree is in the worst case 
-is directly proportional to the logarithm of the minimum of $greater\_number, smaller\_number$. 
-- **Hence,** the big O time 
-complexity is: $O(log(min(greater\_number, smaller\_number)))$.
+- **The numbers** shrink by at least half at least every two steps.
+- **Start:** We begin with the pair $(a, b)$.
+- **Step 1:** The new pair becomes $(b, a \pmod{b})$. Let's call the result of $[a \pmod{b}] \rightarrow r_1$. 
+So the new pair then becomes $(b, r_1)$.
+- **Step 2:** The new pair becomes $(r_1, b \pmod{r_1})$. Let's call the result of $[b \pmod{r_1}] \rightarrow r_2$.
+So the new pair then becomes $(r_1, r_2)$.
+- We want to prove that $r_1 < \frac{a}{2}$.
+- **Case A:** $b <= \frac{a}{2}$. Since $r_1$ is a remainder of a division between $a$ and $b$, 
+we can state that $r_1 < b$ and we know that $b <= \frac{a}{2}$; therefore, $r_1 < \frac{a}{2}$.
+- **Case B:** $b > \frac{a}{2}$. If $b$ is more than half of $a$, we can state that $b$ can only fit into $a$ exactly one time.
+Therefore, the remainder is just the difference: $r_1 = a - b$. Since $b > \frac{a}{2}$, subtracting a number larger than half
+of $a$ leaves the result smaller than half of $a$. Therefore, $r_1 < \frac{a}{2}$.
+- Therefore, the first number in our pair $a$, always drops to less than half of its size every two steps.
+- If you start with a number $X$, you can divide it by 2 a maximum of $log_2(X)$ times before it hits $1$.
+- Since it takes a maximum of two steps for guarantee a halving, the maximum number of steps is $2 • log_2(X)$.
+- $X$ can be replaced with $min(a,b)$ because the remainder $r$ must always be less than the minimum of the two inputs 
+in a division, and so since the remainder $r$ replaces one of the input values, with the other input value being the next 
+modulo operation which is less than $r$, $r$ is upper bounded by the minimum of $a$ and $b$.
+- **Hence,** the big $O$ time 
+complexity is: $O(log(min(a, b)))$.
 <br />
 $Space\;Complexity: O(1)$
 <br />
@@ -116,8 +148,87 @@ $Space\;Complexity: O(1)$
 <br />
 - **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
 of inputs. 
-- **Hence,** the big O time 
-complexity is: $O(1)$.
+- **Hence,** the big $O$ space complexity is: $O(1)$.
+<br />
+### ⚜️&nbsp;&nbsp;LCM of Two Integers
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given two numbers a and b, develop an efficient algorithm to find the least common multiple (LCM)
+of these two numbers.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we will use the Euclidean Algorithm to find the greatest common
+divisor (GCD) of the two numbers and then use this formula: 
+
+$$
+LCM(a, b) = \frac{a\;•\;b}{GCD(a, b)}
+$$
+
+Since I have already implemented a recursive version of $gcd(a, b)$ above, so I will not provide it again here.
+
+I have implemented the solution using iterative implementation:
+<br />
+```python showLineNumbers
+# Iterative Solution
+class Solution:
+    def gcd(self, a: int, b: int) -> int:
+        while b != 0:
+            a_previous = a
+            a = b
+            b = a_previous % b
+        
+        return a
+    def lcm(self, a: int, b: int) -> int:
+        gcd_result = self.gcd(a, b)
+        return (a*b)//gcd_result
+```
+<br />
+$Time\;Complexity: O(log(min(a, b)))$
+<br />
+**Explanation:**
+<br />
+- **The Euclidean Algorithm** in the worst case is $O(log(min(a, b)))$ when $a$
+and $b$ are consecutive Fibonacci numbers.
+- **The multiplication operation** between $a$ and $b$ takes $O(1)$ time.
+- **Dividing** the product by the $gcd(a, b)$ takes $O(1)$ time.
+- **Hence,** the big $O$ time complexity is: $O(log(min(a, b)))$.
+<br />
+$Space\;Complexity: O(log(min(a, b)))\;if\;gcd(a, b)\;was\;implemented\;recursively,
+\;O(1)\;if\;gcd(a, b)\;was\;implemented\;iteratively.$
+<br />
+**Recursive Explanation:**
+<br />
+- **Stack Frame:** A new stack frame is created for each recursive call, and the total memory required is proportional 
+to the number of recursive calls.
+- **The numbers** shrink by at least half at least every two steps.
+- **Start:** We begin with the pair $(a, b)$.
+- **Step 1:** The new pair becomes $(b, a \pmod{b})$. Let's call the result of $[a \pmod{b}] \rightarrow r_1$. 
+So the new pair then becomes $(b, r_1)$.
+- **Step 2:** The new pair becomes $(r_1, b \pmod{r_1})$. Let's call the result of $[b \pmod{r_1}] \rightarrow r_2$.
+So the new pair then becomes $(r_1, r_2)$.
+- We want to prove that $r_1 < \frac{a}{2}$.
+- **Case A:** $b <= \frac{a}{2}$. Since $r_1$ is a remainder of a division between $a$ and $b$, 
+we can state that $r_1 < b$ and we know that $b <= \frac{a}{2}$; therefore, $r_1 < \frac{a}{2}$.
+- **Case B:** $b > \frac{a}{2}$. If $b$ is more than half of $a$, we can state that $b$ can only fit into $a$ exactly one time.
+Therefore, the remainder is just the difference: $r_1 = a - b$. Since $b > \frac{a}{2}$, subtracting a number larger than half
+of $a$ leaves the result smaller than half of $a$. Therefore, $r_1 < \frac{a}{2}$.
+- Therefore, the first number in our pair $a$, always drops to less than half of its size every two steps.
+- If you start with a number $X$, you can divide it by 2 a maximum of $log_2(X)$ times before it hits $1$.
+- Since it takes a maximum of two steps for guarantee a halving, the maximum number of steps is $2 • log_2(X)$.
+- $X$ can be replaced with $min(a,b)$ because the remainder $r$ must always be less than the minimum of the two inputs 
+in a division, and so since the remainder $r$ replaces one of the input values, with the other input value being the next 
+modulo operation which is less than $r$, $r$ is upper bounded by the minimum of $a$ and $b$.
+- **Therefore,** the height of the recursion tree is upper bounded by the $2•log_2(min(a, b))$.
+- **For the remaining arithmetic operations**, namely the multiplication of $a$ and $b$, 
+and the division of the product with $gcd(a,b)$, 
+the algorithm only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. 
+- **Hence,** the big $O$ space 
+complexity is: $O(log(min(a, b)))$.
+<br />
+**Iterative Explanation:**
+<br />
+- **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. 
+- **Hence,** the big $O$ space complexity is: $O(1)$. 
 <br />
 ## Bitwise Algorithms
 
