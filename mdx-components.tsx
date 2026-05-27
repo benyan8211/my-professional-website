@@ -5,12 +5,12 @@ import './app/globals.css';
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     // This allows you to style your MDX without Tailwind
-    h1: ({ children }) => <h1 className="text-4xl font-bold mb-4">{children}</h1>,
-    h2: ({ children }) => (
-        <h2 className="text-2xl font-bold tracking-tight">{children}</h2>
+    h1: ({ children, id }) => <h1 id={id} className="text-4xl font-bold mb-4">{children}</h1>,
+    h2: ({ children, id }) => (
+        <h2 id={id} className="text-2xl font-bold tracking-tight">{children}</h2>
     ),
-    h3: ({ children }) => (
-      <h3 className="text-xl font-bold tracking-tight">{children}</h3>
+    h3: ({ children, id }) => (
+      <h3 id={id} className="text-xl font-bold tracking-tight">{children}</h3>
     ),
     img: (props) => (
       <Image
@@ -30,8 +30,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     td: ({ children }) => (
       <td className="border px-4 py-3 text-left">{children}</td>
     ),
-    ul: (props: any) => <ul className="list-disc pl-5" {...props} />,
-    li: (props: any) => <li className="mb-1" {...props} />,
+    ul: (props: any) => <ul className="list-disc pl-5 toc-list" {...props} />,
+    li: (props: any) => <li className="mb-1 toc-list" {...props} />,
     ...components,
   }
 }

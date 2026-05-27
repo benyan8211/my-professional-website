@@ -11,6 +11,8 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkToc from 'remark-toc';
+import rehypeSlug from 'rehype-slug';
 import { useMDXComponents } from '@/mdx-components';
 
 
@@ -24,7 +26,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const themeFilePath = path.join(process.cwd(), 'theme.json');
   const mdxOptions: any = {
-    remarkPlugins: [remarkFrontmatter, remarkGfm, remarkMath],
+    remarkPlugins: [remarkFrontmatter, remarkGfm, remarkMath, [remarkToc, { heading: 'table of contents', maxDepth: 3 }]],
     rehypePlugins: [
       [
         rehypePrettyCode,
@@ -32,7 +34,8 @@ export default async function BlogPostPage({ params }: PageProps) {
           theme: JSON.parse(fs.readFileSync(themeFilePath, 'utf8'))
         },
       ],
-      rehypeKatex
+      rehypeKatex,
+      rehypeSlug
     ],
   };
 

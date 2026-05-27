@@ -59,3 +59,23 @@ code > [data-line]::before {
 [data-line] {
   @apply px-4 border-l-4 border-l-transparent;
 }
+
+.prose .toc-list a {
+  color: #FFFFFF;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+/* Hover color change effect */
+.prose .toc-list a:hover {
+  color: #3b82f6; /* Example: Blue */
+}
+
+/* Indent subsections */
+.prose .toc-list ul {
+  padding-left: 1.5rem;
+}
+
+h2#table-of-contents + ul {
+  margin-bottom: 4rem; /* Add your desired spacing here */
+}
