@@ -29,7 +29,7 @@ solves each sub-problem only once, and stores the solution of each sub-problem i
 <br />
 ### ⚜️&nbsp;&nbsp;GCD of Two Numbers
 <br />
-**<u>Problem:</u>**&nbsp;&nbsp;Given two numbers a and b, develop an efficient algorithm to find the greatest common divisor (GCD)
+**<u>Problem:</u>**&nbsp;&nbsp;Given two numbers $a$ and $b$, develop an efficient algorithm to find the greatest common divisor (GCD)
 between these two numbers.
 <br />
 **<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we will use the Euclidean Algorithm.
@@ -152,14 +152,14 @@ of inputs.
 <br />
 ### ⚜️&nbsp;&nbsp;LCM of Two Integers
 <br />
-**<u>Problem:</u>**&nbsp;&nbsp;Given two numbers a and b, develop an efficient algorithm to find the least common multiple (LCM)
-of these two numbers.
+**<u>Problem:</u>**&nbsp;&nbsp;Given two integers $a$ and $b$, develop an efficient algorithm to find the least 
+common multiple (LCM) of these two integers.
 <br />
 **<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we will use the Euclidean Algorithm to find the greatest common
-divisor (GCD) of the two numbers and then use this formula: 
+divisor (GCD) of the two integers and then use this formula: 
 
 $$
-LCM(a, b) = \frac{a\;•\;b}{GCD(a, b)}
+lcm\_integer(a, b) = \frac{a\;•\;b}{gcd(a, b)}
 $$
 
 Since I have already implemented a recursive version of $gcd(a, b)$ above, so I will not provide it again here.
@@ -176,9 +176,10 @@ class Solution:
             b = a_previous % b
         
         return a
-    def lcm(self, a: int, b: int) -> int:
+    
+    def lcm_integer(self, a: int, b: int) -> int:
         gcd_result = self.gcd(a, b)
-        return (a*b)//gcd_result
+        return (a*b) // gcd_result
 ```
 <br />
 $Time\;Complexity: O(log(min(a, b)))$
@@ -201,7 +202,90 @@ This worst-case scenario happens when $a$ and $b$ are consecutive Fibonacci numb
 - **For the remaining arithmetic operations**, namely the multiplication of $a$ and $b$, 
 and the division of the product with $gcd(a,b)$, 
 the algorithm only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. So $O(1)$ space.
+- **Hence,** the big $O$ space 
+complexity is: $O(log(min(a, b)))$.
+<br />
+**Iterative Explanation:**
+<br />
+- **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
 of inputs. 
+- **Hence,** the big $O$ space complexity is: $O(1)$. 
+<br />
+### ⚜️&nbsp;&nbsp;LCM of Two Non-Integers
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given two non-integers $a$ and $b$, develop an efficient algorithm to find the least common 
+multiple (LCM) of these two non-integers.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we will convert the non-integers into fractions, and then separate
+$a$ and $b$ into numerators in denominators. Then we will use the lcm
+algorithm for integers explained above to compute the $lcm\_integer(numerator\_a, numerator\_b)$. 
+Then we will use the gcd algorithm
+to compute $gcd(denominator\_a, denominator\_b)$. Then we will plug the results into this formula:
+
+$$
+lcm\_non\_integer(a, b) = \frac{lcm\_integer(numerator\_a, numerator\_b)}{gcd(denominator\_a, denominator\_b)}
+$$
+
+Since I have already implemented a recursive version of $gcd(a, b)$ above, so I will not provide it again here.
+
+I have implemented the solution using iterative implementation:
+<br />
+```python showLineNumbers
+# Iterative Solution
+from fractions import Fraction
+
+class Solution:
+    def gcd(self, a: int, b: int) -> int:
+        while b != 0:
+            a_previous = a
+            a = b
+            b = a_previous % b
+        
+        return a
+    
+    def lcm_integer(self, a: int, b: int) -> int:
+        gcd_result = self.gcd(a, b)
+        return (a*b) // gcd_result
+
+    def lcm_non_integer(self, a: float, b: float) -> float:
+        a_fraction = Fraction(a)
+        b_fraction = Fraction(b)
+
+        numerator_a = a_fraction.numerator
+        numerator_b = b_fraction.numerator
+
+        denominator_a = a_fraction.denominator
+        denominator_b = b_fraction.denominator
+
+        lcm_numerator = self.lcm_integer(numerator_a, numerator_b)
+        gcd_denominator = self.gcd(denominator_a, denominator_b)
+
+        return lcm_numerator / gcd_denominator
+```
+<br />
+$Time\;Complexity: O(log(min(a, b)))$
+<br />
+**Explanation:**
+<br />
+- **The Euclidean Algorithm** time complexity in the worst-case is $O(log(min(a, b)))$.
+This worst-case scenario happens when $a$ and $b$ are consecutive Fibonacci numbers. <br />(See explanation above)
+- **The LCM Algorithm for integers** has time complexity in the worst-case is $O(log(min(a, b)))$.
+This worst-case scenario happens when $a$ and $b$ are consecutive Fibonacci numbers. <br />(See explanation above)
+- **Dividing** the $lcm\_integer(numerator\_a, numerator\_b)$ by the $gcd(denominator\_a, denominator\_b)$ takes $O(1)$ time.
+- **Hence,** the big $O$ time complexity is: $O(log(min(a, b)))$.
+<br />
+$Space\;Complexity: O(log(min(a, b)))\;if\;gcd(a, b)\;was\;implemented\;recursively,
+\;O(1)\;if\;gcd(a, b)\;was\;implemented\;iteratively.$
+<br />
+**Recursive Explanation:**
+<br />
+- **The Euclidean Algorithm** space complexity in the worst-case when implemented recursively is $O(log(min(a, b)))$.
+This worst-case scenario happens when $a$ and $b$ are consecutive Fibonacci numbers. (See explanation above)
+- **For the remaining arithmetic operations**, namely the arithmetic operations within the $lcd\_integer$ algorithm
+and the division of $lcm\_integer(numerator\_a, numerator\_b)$ by the $gcd(denominator\_a, denominator\_b)$, 
+the algorithm only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. So $O(1) space.$
 - **Hence,** the big $O$ space 
 complexity is: $O(log(min(a, b)))$.
 <br />
