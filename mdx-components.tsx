@@ -1,5 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
 import Image from 'next/image';
+import BackToTopButton from './app/compendium/backToTopButton';
 import './app/globals.css';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -32,6 +33,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     ul: (props: any) => <ul className="list-disc pl-5 toc-list" {...props} />,
     li: (props: any) => <li className="mb-1 toc-list" {...props} />,
+    BackToTopButton: BackToTopButton,
     ...components,
   }
 }
