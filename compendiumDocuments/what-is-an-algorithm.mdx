@@ -295,6 +295,52 @@ complexity is: $O(log(min(a, b)))$.
 of inputs. 
 - **Hence,** the big $O$ space complexity is: $O(1)$. 
 <br />
+### ⚜️&nbsp;&nbsp;Is Prime
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given an integer $n$, determine if it is a prime number or not. A prime number is a number greater 
+than 1 that has no positive divisors other than 1 and itself.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;If $n$ is composite (not prime), it can be factored into two numbers $a$ and $b$ such that
+$n = a\;•\;b$.<br />If both $a > \sqrt{n}\;and\;b > \sqrt{n},\;then\;a\;•\;b > n$. 
+Similarly if $a < \sqrt{n}\;and\;b < \sqrt{n},\;then\;a\;•\;b < n$.<br />Therefore either $a \leq \sqrt{n}\;and\;b \geq \sqrt{n}$,
+or $a \geq \sqrt{n}\;and\;b \leq \sqrt{n}$.<br />Either way, at least one of the factors of $n$ must be less than or equal 
+to $\sqrt{n}$.
+This is good because then we can loop starting from the smallest prime number 2 to $\sqrt{n}$. If there exists such a factor, we
+will return $False$. But if after the loop no such factor is found, we will return $True$.
+We must also ensure that if $n \leq 1$, we return $False$, as the smallest prime number is 2.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+import math
+
+class Solution:
+    def isPrime(self, n: int) -> bool:
+        if n <= 1:
+            return False
+
+        i = 2
+        while i <= math.sqrt(n):
+            if n % i == 0:
+                return False
+            i += 1
+        
+        return True
+```
+<br />
+$Time\;Complexity: O(\sqrt{n})$
+<br />
+**Explanation:**
+<br />
+- **The loop** runs $\sqrt{n} - 1$ times.
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. 
+<br />
 ## Bitwise Algorithms
 
 ## List Algorithms
