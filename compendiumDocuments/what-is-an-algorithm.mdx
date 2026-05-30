@@ -308,8 +308,8 @@ of inputs.
 <br />
 ### ⚜️&nbsp;&nbsp;Is Prime
 <br />
-**<u>Problem:</u>**&nbsp;&nbsp;Given an integer $n$, determine if it is a prime number or not. A prime number is a number greater 
-than 1 that has no positive divisors other than 1 and itself.
+**<u>Problem:</u>**&nbsp;&nbsp;Given an integer $n$, develop an efficient algorithm to determine if it is a prime number or not. 
+A prime number is a number greater than 1 that has no positive divisors other than 1 and itself.
 <br />
 **<u>Solution:</u>**&nbsp;&nbsp;If $n$ is composite (not prime), it can be factored into two numbers $a$ and $b$ such that
 $n = a\;•\;b$.<br />If both $a > \sqrt{n}\;and\;b > \sqrt{n},\;then\;a\;•\;b > n$. 
@@ -326,7 +326,7 @@ I have implemented the solution below:
 import math
 
 class Solution:
-    def isPrime(self, n: int) -> bool:
+    def is_prime(self, n: int) -> bool:
         if n <= 1:
             return False
 
@@ -344,6 +344,7 @@ $Time\;Complexity: O(\sqrt{n})$
 **Explanation:**
 <br />
 - **The loop** runs $\sqrt{n} - 1$ times.
+- **Hence,** big $O$ time complexity is $O(\sqrt{n})$
 <br />
 $Space\;Complexity: O(1)$
 <br />
@@ -351,21 +352,808 @@ $Space\;Complexity: O(1)$
 <br />
 - **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
 of inputs. 
+- **Hence,** big $O$ space complexity is $O(1)$
 <br />
 <BackToTopButton />
 <br />
 ## Bitwise Problems
+<br />
+### ⚜️&nbsp;&nbsp;Check if k<sup>th</sup> bit is set or not
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given an integer $n$ and non-negative integer $k$, develop an efficient algorithm to 
+check if the $k^{th}$ bit is set or not. If the $k^{th}$ bit is set, then return $True$. Otherwise, return $False$.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we want to use bitwise AND operator. Bitwise AND operator compares two binary
+values bit by bit, position by position. If in a given position, both of the bits are $1$, then the resulting bit in that position
+is $1$, otherwise it is $0$. We take $n$ and perform bitwise AND operation on $2^k$, because in $2^k$ only the $k^{th}$ bit 
+is set. So when the bitwise AND operation is performed, we know that in the result all other bits besides $k^{th}$ bit will be $0$. 
+We know that the $k^{th}$ bit is set in $2^{k}$; therefore, the $k^{th}$ bit will be set in the result only if the $k^{th}$
+bit is also set in $n$. Otherwise, the $k^{th}$ bit will be $0$. Therefore, if the $k^{th}$ bit is set in the result, 
+the value of the result will be $\gt 0$, otherwise the value of the result will be $0$.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Solution:
+    def check_kth_bit(self, n: int, k: int) -> bool:
+        if n&(1<<k) > 0:
+            return True
+        else:
+            return False
+```
+<br />
+$Time\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **The bitwise** AND operation, shifting bits and comparison with $0$ all take constant time.
+- **Hence,** the big $O$ time complexity is $O(1)$
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. 
+- **Hence,** big $O$ space complexity is $O(1)$
+<br />
+<BackToTopButton />
+<br />
+## String Problems
+<br />
+### ⚜️&nbsp;&nbsp; Valid Anagram
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given two strings $str1$ and $str2$, develop an efficient algorithm to determine if the two 
+strings are anagrams of each other. This means that the two strings are composed of the exact same characters with the 
+exact same frequencies, just potentially arranged in a different order. If the two strings are anagrams of each other,
+return $True$, otherwise return $False$.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp; To solve this problem, the first thing to do is to check if the lengths of $str1$ and $str2$
+are equal. If the lengths are not equal, we can immediately return $False$, because the strings cannot have the same
+frequency of characters if their lengths are different. Then we create an empty dictionary called $char\_count$. We then
+loop through $str1$ character by character and for every character, use $char\_count$ to keep track of the number of times
+each character appears in the string $str1$. Then after that loop has completed, we will loop through $str2$ character by
+character. If we encounter a character that is not in $char\_count$, we can immediately return $False$, because we know that
+$str2$ has a character that is not in $str1$ and so it cannot be an anagram of $str1$. For every character that is in 
+$char\_count$, we will subtract $1$ from the character's count in $char\_count$. And if the count for a 
+character becomes $0$, we delete that character from the dictionary $char\_count$. After this loop, if the two strings $str1$ 
+and $str2$ are valid anagrams, then the dictionary $char\_count$ should be empty in the end. If $char\_count$ is empty,
+return $True$; otherwise return $False$.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Solution:
+    def valid_anagram(self, str1: str, str2: str) -> bool:
+        if len(str1) != len(str2):
+            return False
+        
+        char_count = {}
 
-## List Problems
+        for character in str1:
+            char_count[character] = char_count.get(character, 0) + 1
+        
+        for character in str2:
+            if character not in char_count:
+                return False
 
-## Sorting Problems
+            char_count[character] -= 1
 
+            if char_count[character] == 0:
+                del char_count[character]
+
+        if len(char_count) == 0:
+            return True
+        else: 
+            return False
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case,** the strings $str1$ and $str2$ have the same length, let us call the length $n$.
+- **The algorithm iterates** through each string twice.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **There are 256** possible ASCII characters, so at most $char\_count$ can hold 256 key-value pairs, which is independent
+of the length of the strings $str1$ and $str2$.
+- **Hence,** big $O$ space complexity is $O(1)$.
+<br />
+<BackToTopButton />
+<br />
+## Array Problems
+<br />
+### ⚜️&nbsp;&nbsp;Binary Search
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given a sorted array of integers $arr$ and a key $k$, develop an efficient algorithm to 
+determine if $k$ exists in $arr$, if it does return the index in $arr$ where the $k$ is found; otherwise, return $-1$.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we implement the **Binary Search algorithm**, The key idea is that we need 
+to repeatedly divide the search space in half by looking at the middle element of the search space. If the middle element is our 
+key then return the index of the middle element. If the middle element is not our key, check if our key is smaller or larger than 
+the middle element. If the key is smaller than the middle element, divide the search space in half and keep only the left half 
+for further evaluation. If the key is larger than the middle element, divide the search space in half and keep only the right 
+half for further evaluation. Keep repeating this process until either we have found the element or there is no more search space 
+left to evaluate.
+<br />
+I have implemented the Binary Search algorithm using recursion:
+<br />
+```python showLineNumbers
+# Recursive Solution
+class Solution:
+    def binary_search(self, arr: list[int], k: int) -> int:
+        if not arr:
+            return -1
+        
+        mid = len(arr) // 2
+
+        if arr[mid] == k:
+            return mid
+        elif arr[mid] > k:
+            return self.binary_search(arr[:mid], k)
+        else:
+            right_side_index = self.binary_search(arr[mid+1:], k)
+            if right_side_index != -1:
+                return right_side_index + mid + 1
+            else:
+                return -1
+```
+<br />
+$Time\;Complexity: O(log\;n)$
+<br />
+**Explanation:**
+<br />
+- **At the first step,** the search space is $n$.
+- **At the second step,** the search space is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the search space is $\frac{n}{2^k}$.
+- **The recursion stops** when the search space is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
+- **Therefore,** big $O$ time complexity is $O(log\;n)$.
+<br />
+$Space\;Complexity: O(log\;n)$
+<br />
+**Explanation:**
+<br />
+- **Every time** the recursive function calls itself, a new stack frame is created.
+- **At the first step,** the search space is $n$.
+- **At the second step,** the search space is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the search space is $\frac{n}{2^k}$.
+- **The recursion stops** when the search space is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
+- **This means** that there are $log_2(n)$ stack frames created.
+- **Therefore**, big $O$ space complexity is $O(log\;n)$.
+<br />
+I have also implemented the Binary Search algorithm iteratively:
+<br />
+```python showLineNumbers
+# Iterative Solution
+class Solution:
+    def binary_search(self, arr: list[int], k: int) -> int:
+        low = 0
+        high = len(arr) - 1
+
+        while low <= high:
+            mid = low + (high - low) // 2
+            
+            if arr[mid] == k:
+                return mid
+            elif arr[mid] > k:
+                high = mid - 1
+            else:
+                low = mid + 1
+        return -1
+```
+<br />
+$Time\;Complexity: O(log\;n)$
+<br />
+**Explanation:**
+<br />
+- **At the first step,** the search space is $n$.
+- **At the second step,** the search space is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the search space is $\frac{n}{2^k}$.
+- **The recursion stops** when the search space is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
+- **Therefore,** big $O$ time complexity is $O(log\;n)$.
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. 
+- **Hence,** big $O$ space complexity is $O(1)$
+<br />
+<BackToTopButton />
+<br />
+## Linked List Problems
+<br />
+### ⚜️&nbsp;&nbsp;Reverse Linked List
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given a pointer to the head node of a singly linked-list, reverse the list in place and return
+a pointer to the reversed linked list's head node.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;In this problem, we are presented with a pointer to the head node of the singly linked-list
+called $head$. To solve this problem recursively, we set the base case as the following: if $head$ is $null$ or if $head.next$ 
+is $null$, return $head$. Next we make a recursive call and pass in $head.next$, which is the next element in the singly 
+linked-list and store it in a variable called $new\_head$. We call this variable $new\_head$ because as the reversal of links 
+progresses the node that $new\_head$ is pointing at will effectively be the new head node of the portion of the singly 
+linked-list that has been reversed so far. Next we reverse the pointer. To do this, we use $head.next.next = head$. What this
+is saying is take $head.next$, which is the next node, and make its $.next$ value equal to $head$, effectively 
+reversing the pointers direction. The next step is to clean up the old pointer. 
+Lastly, we return $new_head$.
+<br />
+I have implemented the solution recursively below:
+<br />
+```python showLineNumbers
+# Recursive Solution
+from typing import Self 
+
+class ListNode:
+    def __init__(self, val: int = 0, next: Self = None):
+        self.val = val
+        self.next = next
+
+class Solution:
+    def reverse_linked_list(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+        
+        new_head = self.reverse_linked_list(head.next)
+
+        head.next.next = head
+        head.next = None
+
+        return new_head
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** visits each node of the singly linked-list once.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **Every time** the recursive function calls itself, a new stack frame is created.
+- **The recursive function** calls itself each time the algorithm visits a new node 
+in the singly linked-list.
+And the algorithm visits each node of the singly linked-list once.
+- **Therefore,** the algorithm creates $n$ stack frames during its execution.
+- **Hence,** the big $O$ space complexity is $O(n)$.
+<br />
+Now that we've discussed how to solve the problem recursively, we will now transition to the iterative solution.
+To solve this problem iteratively, we want to step through the singly linked-list and reverse the $.next$ value of each node
+one by one. As we step through the singly linked-list, we must maintain a pointer of the previous node called 
+$prev\_node$, a pointer of the current node called $curr\_node$, and a pointer of the next node called $next\_node$. 
+The algorithm starts with $curr\_node$ set as $head$ and loops while $curr\_node$ is not $null$ and then in that loop the first 
+action is to store $curr\_node.next$ inside $next\_node$. The reason why we do this is because we do not want to lose access to 
+the rest of the singly linked-list after the $.next$ value of $curr\_node$ has been reversed. Next, we reverse the $.next$ value 
+of $curr\_node$ by setting $curr\_node.next = prev\_node$. After the reversal of the $.next$ value of $curr\_node$, we need to 
+move the pointers one step forward, that way we can continue reversing the $.next$ values of the remaining nodes. So to 
+accomplish this, $prev\_node$ is set to $curr\_node$ and then $curr\_node$ is set to $next\_node$. After this loop completes, 
+$curr\_node$ has a value of $null$, and so $prev\_node$ contains the head of the newly reversed singly linked-list. So we return 
+$prev\_node$.
+<br />
+I have implemented the solution iteratively below:
+<br />
+```python showLineNumbers
+# Iterative Solution
+from typing import Self
+
+class ListNode:
+    def __init__(self, val: int = 0, next: Self = None):
+        self.val = val
+        self.next = next
+
+class Solution:
+    def reverse_linked_list(self, head: ListNode) -> ListNode:
+        prev_node = None
+        curr_node = head
+
+        while curr_node is not None:
+            next_node = curr_node.next
+            curr_node.next = prev_node
+
+            prev_node = curr_node
+            curr_node = next_node
+        
+        return prev_node
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** visits each node of the singly linked-list once.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** only needs to store a few pointer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. 
+- **Hence,** big $O$ space complexity is $O(1)$.
+<br />
+<BackToTopButton />
+<br />
+## Stack Problems
+<br />
+### ⚜️&nbsp;&nbsp;Valid Parentheses
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given a string $parentheses\_string$ containing parentheses characters, develop an efficient
+algorithm to determine if this string is properly closed and nested. Valid parentheses characters include: \(, \), \[, \], \{, \}.
+By properly closed and nested, we mean that every open parentheses has a corresponding closing parentheses and are arranged 
+in the correct order without overlap. Meaning that the last open parentheses are closed first, and the first open parentheses
+are closed last.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we need to create a Stack class that contains pop, push, and isEmpty
+operations and in our main solution function, we initialize an empty stack called $stack$. Then we create a mapping of closing
+parentheses with their corresponding opening parentheses. Next we loop character by character in $parentheses\_string$, if the
+character in question is in the mapping, which means it is a closing parentheses, then we pop from $stack$ and compare that
+character with the corresponding opening parentheses. If they do not match, then return $False$, because there was not a match. 
+Otherwise, we push the character in question onto $stack$. After the loop, we check if the stack is empty or not. 
+If the stack is empty, this means that $parentheses\_string$ is properly closed and nested, so we return $True$. 
+Otherwise, we know that there exists at least one character that did not also match with its corresponding parentheses and so 
+we return $False$.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Stack:
+    def __init__(self):
+        self._items = []
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+    def push(self, item: str) -> None:
+        self._items.append(item)
+    
+    def pop(self) -> str:
+        if self.is_empty():
+            return None
+        else:
+            return self._items.pop()
+
+
+class Solution:
+    def valid_parentheses(self, parentheses_string: str) -> bool:
+        stack = Stack()
+        parentheses_mapping = {
+            ')': '(',
+            ']': '[',
+            '}': '{'
+        }
+
+        for parenthesis in parentheses_string:
+            if parenthesis in parentheses_mapping:
+                if stack.pop() != parentheses_mapping[parenthesis]:
+                    return False
+            else:
+                stack.push(parenthesis)
+
+        if stack.is_empty():
+            return True
+        else:
+            return False 
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case,** the input string consists entirely of opening parentheses. 
+- **The algorithm** will loop through the entirety of the input string of length $n$ exactly once.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case,** the input string consists entirely of opening parentheses.
+- **The algorithm** will push all $n$ characters onto the stack.
+- **Hence,** big $O$ space complexity is $O(n)$.
+<br />
+<BackToTopButton />
+<br />
+## Queue Problems
+<br />
+### ⚜️&nbsp;&nbsp;Number of Recent Calls
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;You have a RecentCounter class which counts the number of requests within a certain
+time frame.
+<br />
+Implement the RecentCounter class:
+- **def __init__(self)** intializes the counter with zero recent requests
+- **def ping(self, t: int) -> int** Adds a new request at time $t$, where $t$ represents some time in milliseconds, and returns
+the number of requests that has happened in the past $3000$ milliseconds (including the new request). Specifically, return
+the number of requests that have happened in the inclusive range $[t - 3000, t]$.
+<br />
+**Note:** It is guaranteed that every call to **ping** uses a strictly larger value of $t$ than the previous call.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we create a custom Queue class with enqueue, dequeue, peek, is_empty,
+and size functions. Then in RecentCounter, in the __init__ function, we create a new queue. Then in the ping function, we 
+enqueue the input $t$. Then we loop through the queue and dequeue any requests that do not fall in the inclusive range
+$[t - 3000, t]$. Then we return the size of the queue.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Queue:
+    def __init__(self):
+        self._items = []
+
+    def enqueue(self, item: int) -> None:
+        self._items.append(item)
+    
+    def dequeue(self) -> int:
+        if self.is_empty():
+            return None
+        else:
+            return self._items.pop(0)
+
+    def peek(self) -> int:
+        if self.is_empty():
+            return None
+        else:
+            return self._items[0]
+        
+    def is_empty(self):
+        return len(self._items) == 0
+
+    def size(self):
+        return len(self._items)
+
+
+class RecentCounter:
+    def __init__(self):
+        self.queue = Queue()
+
+    def ping(self, t: int) -> int:
+        self.queue.enqueue(t)
+
+        while not self.queue.is_empty() and self.queue.peek() < t - 3000:
+            self.queue.dequeue()
+
+        return self.queue.size()
+```
+<br />
+$Time\;Complexity:\;O(1)\;amortized\;per\;ping,\;or\;O(n)\;for\;n\;calls$
+<br />
+**Explanation:**
+<br />
+- **When a new ping** arrives, we add the timestamp to the queue.
+- **One ping** might trigger multiple removals; however, every single ping is added once and removed at most once 
+across the entire lifetime of RecentCounter.
+- **Therefore,** big $O$ time complexity amortized per ping is $O(1)$.
+<br />
+- **The worst-case scenario** is when all $n$ requests happen within the last $3000ms$.
+- **In this case,** the while loop designed to dequeue elements outside the inclusive range $[t - 3000, t]$ will 
+traverse over all $n$ elements but will not remove any of them.
+- **Hence,** big $O$ time complexity for $n$ calls is $O(n)$.
+<br />
+$Space\;Complexity: O(W),\;where\;W\;is\;the\;maximum\;number\;of\;requests\;inside\;the\;sliding\;window$
+<br />
+**Explanation:**
+<br />
+- **The peak memory usage** at any given moment strictly depends on the heaviest traffic spike that fits inside that 3000ms 
+window.
+- **If there is a maximum** of $W$ pings during the $3000ms$ window, the queue will hold $W$ items.
+- **Hence,** big $O$ space complexity is $O(W)$, where $W$ is the maximum number of requests inside the sliding window.
+<br />
+<BackToTopButton />
+<br />
 ## Tree Problems
+<br />
+### ⚜️&nbsp;&nbsp;Binary Tree Preorder Traversal
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given the root of a binary tree, return the preorder traversal of its nodes' values.
+<br />
+**Preorder Traversal (Root &rarr; Left &rarr; Right):** At first the root will be visited. After this, It visits the 
+current node first, processes its entire left subtree, and then moves to its right subtree. 
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;This problem can be solved recursively and iteratively.
+<br />
+First the recursive solution is to create a recursive function that takes as input a TreeNode and the list of preorder node
+values and to recursively add $node.val$ to the list and then recursively call itself on $node.left$ and then on $node.right$.
+The base case of the recursive function is to return if the node passed in as input is $null$. After the recursion is complete,
+return the list of preorder node values.
+<br />
+I have implemented the solution recursively:
+<br />
+```python showLineNumbers
+#Recursive Solution
+from typing import Self, Optional
 
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[Self] = None, right: Optional[Self] = None):
+        self.val = val
+        self.left = left 
+        self.right = right
+
+class Solution:
+    def preorder_traversal_helper(self, current_node: Optional[Self], preorder_traversal_values: list[int]) -> None:
+        if not current_node:
+            return
+        
+        preorder_traversal_values.append(current_node.val)
+        self.preorder_traversal_helper(current_node.left, preorder_traversal_values)
+        self.preorder_traversal_helper(current_node.right, preorder_traversal_values)
+
+    def preorder_traversal(self, root: Optional[Self]) -> list[int]:
+        preorder_traversal_values = []
+        self.preorder_traversal_helper(root, preorder_traversal_values)
+        return preorder_traversal_values
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** must visit every single node in the tree exactly once.
+- **Therefore,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **Stack Frame:** A new stack frame is created for each recursive call, and the total memory required is proportional 
+to the number of recursive calls.
+- **The number of** active stack frames is proportional to the height of the tree, because each recursive function call 
+corresponds to the algorithm traversing down one level from the current node to a child node (left or right). The algorithm
+will accumulate stack frames until it reaches a leaf node. A leaf node has no recursive calls to make, because it has no child
+nodes, and so it will not create new stack frames. Since a leaf node has no children, it has no choice but to return and 
+this will cause the algorithm to traverse up one level, thereby releasing a stack frame from active use. After one subtree
+has been traversed, the algorithm will have released all stack frames accumulated during that subtree traversal before it 
+traverses the next subtree.
+- **Therefore,** the maximum number of active frames that the program has at any point during its execution is directly 
+determined by the height of the tree.
+- **In the worst-case,** we have a skewed binary tree, where every node has at most one child node. Instead of branching
+out, the tree grows linearly, rendering a configuration of the nodes that yields the maximum possible height $n-1$,
+where $n$ represents the number of nodes in the tree.
+- *Hence,* the big $O$ space complexity is $O(n)$
+<br />
+Next, we will transition to the iterative solution. To solve this problem iteratively, we maintain a stack that is a 
+running collection of nodes that have not been processed yet. Initially, the stack only has the root node. Then
+while the stack is not empty, we pop from the stack and add the value of the popped node to the result, if there is 
+a right child, we push it onto the stack, and then if there is a left child, we push it onto the stack. This guarantees
+that for a given node, if that node has both left child and right child, the left child will get processed first, since
+it is on the top of the stack. Keep looping until the stack is empty and once the loop has finished, return the result.
+<br />
+I have implemented the solution iteratively:
+<br />
+```python showLineNumbers
+#Iterative Solution
+from typing import Self, Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[Self] = None, right: Optional[Self] = None):
+        self.val = val
+        self.left = left 
+        self.right = right
+
+class Stack:
+    def __init__(self):
+        self._items = []
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+    def push(self, item: str) -> None:
+        self._items.append(item)
+    
+    def pop(self) -> str:
+        if self.is_empty():
+            return None
+        else:
+            return self._items.pop()
+
+class Solution:
+    def preorder_traversal(self, root: Optional[Self]) -> list[int]:
+        preorder_traversal_values = []
+        stack = Stack()
+        stack.push(root)
+
+        while not stack.is_empty():
+            node = stack.pop()
+            preorder_traversal_values.append(node.val)
+
+            if node.right:
+                stack.push(node.right)
+
+            if node.left:
+                stack.push(node.left)
+        
+        return preorder_traversal_values
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** must visit every single node in the tree exactly once.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+**Explanation:**
+<br />
+$Space\;Complexity: O(h)$
+<br />
+- **In the worst-case,** the binary tree is balanced. 
+- **On each iteration** of the while loop, the algorithm is going one level deeper in the tree and the algorithm is pushing 
+two nodes (the left child and the right child) onto the stack and is popping one node (the parent) off of the top
+of the stack. 
+- **So therefore,** at every level of the tree the stack is accumulating a net total of one node. 
+- **By the time** the algorithm reaches a leaf node, the stack will have $h$ nodes, where $h$ is the height of the tree. 
+- **The leaf node** has no child nodes, so the algorithm has no choice but to pop, which means the stack has just become 
+smaller and the algorithm is now addressing the popped node, which is a node at the level above the leaf node. 
+- **Therefore,** the maximum number of nodes the stack can have during the program's execution is $h$.
+- **Hence,** big $O$ space complexity is $O(h)$.
+<br />
+<BackToTopButton />
+<br />
+### ⚜️&nbsp;&nbsp;Binary Tree Inorder Traversal
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given the root of a binary tree, return the inorder traversal of its nodes' values.
+<br />
+**Inorder Traversal (Left &rarr; Root &rarr; Right):** At first process the left subtree. Then visit the root node.
+Lastly, process the right subtree.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;This problem can be solved recursively and iteratively.
+<br />
+First the recursive solution is to create a recursive function that takes as input a TreeNode and the list of inorder node
+values and to perform a recursive call on $node.left$. Then add the input node's value to the list of inorder node values.
+Lastly, perform a recursive call on $node.right$. The base case is to return when the input node is $null$. After the recursion
+is complete, return the list of inorder node values.
+<br />
+I have implemented the recursive solution below:
+<br />
+```python showLineNumbers
+#Recursive Solution
+from typing import Self, Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[Self] = None, right: Optional[Self] = None):
+        self.val = val
+        self.left = left 
+        self.right = right
+
+class Solution:
+    def inorder_traversal_helper(self, current_node: Optional[Self], inorder_traversal_values: list[int]) -> None:
+        if not current_node:
+            return
+        
+        self.inorder_traversal_helper(current_node.left, inorder_traversal_values)
+        inorder_traversal_values.append(current_node.val)
+        self.inorder_traversal_helper(current_node.right, inorder_traversal_values)
+
+    def inorder_traversal(self, root: Optional[Self]) -> list[int]:
+        inorder_traversal_values = []
+        self.inorder_traversal_helper(root, inorder_traversal_values)
+        return inorder_traversal_values
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** must visit every single node in the tree exactly once.
+- **Therefore,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **Stack Frame:** A new stack frame is created for each recursive call, and the total memory required is proportional 
+to the number of recursive calls.
+- **The number of** active stack frames is proportional to the height of the tree, because each recursive function call 
+corresponds to the algorithm traversing down one level from the current node to a child node (left or right). The algorithm
+will accumulate stack frames until it reaches a leaf node. A leaf node has no recursive calls to make, because it has no child
+nodes, and so it will not create new stack frames. Since a leaf node has no children, it has no choice but to return and 
+this will cause the algorithm to traverse up one level, thereby releasing a stack frame from active use. After one subtree
+has been traversed, the algorithm will have released all stack frames accumulated during that subtree traversal before it 
+traverses the next subtree.
+- **Therefore,** the maximum number of active frames that the program has at any point during its execution is directly 
+determined by the height of the tree.
+- **In the worst-case,** we have a skewed binary tree, where every node has at most one child node. Instead of branching
+out, the tree grows linearly, rendering a configuration of the nodes that yields the maximum possible height $n-1$,
+where $n$ represents the number of nodes in the tree.
+- *Hence,* the big $O$ space complexity is $O(n)$
+<br />
+Next, we will transition to the iterative solution. To solve this problem iteratively, we maintain a stack that is a 
+running collection of nodes that have not been processed yet. Initially, the stack is empty and we have a $current\_node$
+pointer set to the root node. Then we need to run a nested while loop. While the $current\_node$ is not $null$ or the length
+of the stack is $\gt 0$, because if the there are items in the stack, that means we still have nodes remaining that must
+be processed, also if the stack is empty, that does not necessarily mean that we are done, because it could be the case that
+the current node has no left children, which would make the stack empty, but there are still nodes remaining to be processed.
+Inside that while loop, we want to have a while loop that traverses down the left subtree and 
+pushes all left children onto the stack, then after that traversal loop, pop from the top of the stack, store the value in
+the result and set the $current\_node = current\_node.right$. After the outer while loop is complete, we will have processed
+all nodes, so just return the result.
 ## Heap Problems
 
 ## Graph Problems
 
-## Backtracking Problems
-
 ## Dynamic Programming Problems
+<br />
+### ⚜️&nbsp;&nbsp;Find all Prime numbers less than or equal to n (Sieve of Eratosthenes)
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given a positive integer $n$, develop an efficient algorithm to calculate and return all 
+prime numbers less than or equal to $n$. A prime number is a number greater than $1$ that has no positive divisors other 
+than $1$ and itself.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;First, we must begin by explaining how to determine if a number is prime.<br />
+If $n$ is composite (not prime), it can be factored into two numbers $a$ and $b$ such that
+$n = a\;•\;b$.<br />If both $a > \sqrt{n}\;and\;b > \sqrt{n},\;then\;a\;•\;b > n$. 
+Similarly if $a < \sqrt{n}\;and\;b < \sqrt{n},\;then\;a\;•\;b < n$.<br />Therefore either $a \leq \sqrt{n}\;and\;b \geq \sqrt{n}$,
+or $a \geq \sqrt{n}\;and\;b \leq \sqrt{n}$.<br />Either way, at least one of the factors of $n$ must be less than or equal 
+to $\sqrt{n}$. We can use this information to find out if a number is prime or not.
+We can loop starting from the smallest prime number $2$ to $\sqrt{n}$. If there exists such a factor, that divides into
+$n$ evenly we will know that $n$ is not prime. But if after the loop no such factor is found, we will know that $n$ is prime.
+<br />
+Having understood this, we will now discuss the **Sieve of Eratosthenes algorithm**. The basic idea of this algorithm is to take 
+any prime number $p$. The multiples of $p$, such as $2p, 3p, 4p, 5p, ...$ will not be prime, because they are all divisible by
+$p$. So to find all of the prime numbers from $1$ to $n$, I will create an array of size $n+1$, call it $primes$,
+and each element of $primes$ will represent a number starting from $0$. So the element at index $0$ will represent $0$, 
+the element at index $1$ will represent $1$, and so on. The value of each element will be if this number is prime or not. 
+So it will be $True$ if the number is prime, and $False$ if the number is not prime. To start, we will set the value of every 
+element in $primes$ to $True$. Then we will set the values of the elements at index $0$ and index $1$ to $False$, because $0$ 
+is not prime and $1$ is not prime. Then we loop from $2$ to $\sqrt{n}$. We loop to $\sqrt{n}$ because any composite number 
+$k$, where $k \leq n$, will have a factor less than or equal to $\sqrt{n}$. So then by the time the loop ends at $\sqrt{n}$, 
+all composite numbers $k \leq n$ will have been marked $False$. If $primes[i]$, where $i$ is the current index, is $True$, then mark
+all multiples of $i$ starting from $i^2$ to $n$ as $False$. We begin with $i^2$ because all composite numbers previous to 
+$i^2$ would have already been marked as $False$, because those values will contain prime factors that are less than $i$, 
+and so they will have been covered in a previous iteration of the loop. After the loop, print a list of all indices where 
+the value in $primes$ at that index is $True$.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+import math
+
+class Solution:
+    def sieve_of_eratosthenes(self, n: int) -> list[int]:
+        primes = [True] * (n + 1)
+        primes[0] = False
+        primes[1] = False
+
+        primes_index = 2
+        while primes_index <= math.sqrt(n):
+            if primes[primes_index] == True:
+                multiples_index = primes_index*primes_index
+                while multiples_index <= n:
+                    primes[multiples_index] = False
+                    multiples_index += primes_index
+            primes_index += 1
+        
+        return [p for p in range(n+1) if primes[p] == True] 
+```
+<br />
+$Time\;Complexity: O(nloglog\;n)$
+<br />
+**Explanation:**
+<br />
+- **For every prime** $p$, the algorithm crosses out its multiples up to n. This takes $\frac{n}{p}$ operations,
+because for any generic prime $p$, the algorithm crosses out $p, 2p, 3p,...,n$. Therefore, there are $\frac{n}{p}$
+cross outs to perform.
+- **Summing up** the operations yields $\sum_{p \leq n} \frac{n}{p}$, which simplifies to $n\sum_{p \leq n} \frac{1}{p}$. 
+- **Mertens' Theorem** states that $\sum_{p \leq n} \frac{1}{p}$ grows proportionally to $log(log\;n)$. 
+- **Hence,** big $O$ time complexity is $O(nloglog\;n)$
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** uses a boolean array of size $n$. 
+- **Hence,** the big $O$ space complexity is $O(n)$
+<br />
+<BackToTopButton />
+<br />

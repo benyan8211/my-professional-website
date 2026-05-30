@@ -49,7 +49,10 @@
               "punctuation.definition.arguments.begin.python",
               "punctuation.definition.arguments.end.python",
               "punctuation.separator.arguments.python",
-              "support.function.builtin.python"
+              "support.function.builtin.python",
+              "constant.language.python",
+              "punctuation.section.class.begin.python",
+              "punctuation.separator.period.python"
           ],
           "settings": {
               "foreground": "#DCDCDC" 

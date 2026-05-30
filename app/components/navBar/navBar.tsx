@@ -1,3 +1,5 @@
+'use client'
+
 import { Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from "flowbite-react";
 import styles from "./navBar.module.css";
 

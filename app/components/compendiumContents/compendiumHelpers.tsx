@@ -1,10 +1,12 @@
+'use server'
+
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
 const contentPath = path.join(process.cwd(), 'compendiumDocuments');
 
-export function getAllPosts() {
+export async function getAllPosts() {
   const files = fs.readdirSync(contentPath);
 
   return files.map((fileName) => {

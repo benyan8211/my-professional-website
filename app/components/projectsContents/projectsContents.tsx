@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import websiteUnderConstruction from "../../assets/website_under_construction.png";
 import styles from "./projectsContents.module.css";

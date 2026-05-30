@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import myProfessionalPicture from "../../assets/professional_picture.jpg";
 import styles from "./homePageContents.module.css";

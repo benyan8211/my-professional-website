@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link';
 import awsLogo from "../../assets/aws_logo.jpeg";
@@ -17,6 +19,7 @@ const AboutMeContents = () => {
                         height={500}
                         alt="Picture of aws logo"
                         className="object-cover"
+                        priority
                     />
                 </div>
                 <div className={`relative w-48 h-48 overflow-hidden rounded-full ${styles.imageContainer}`}>
@@ -24,8 +27,9 @@ const AboutMeContents = () => {
                         src={nodejsLogo}
                         width={250}
                         height={250}
-                        alt="Picture of aws logo"
+                        alt="Picture of nodejs logo"
                         className="object-cover"
+                        priority
                     />
                 </div>
                 <div className={`relative w-48 h-48 overflow-hidden rounded-full ${styles.imageContainer}`}>
@@ -33,8 +37,9 @@ const AboutMeContents = () => {
                         src={githubLogo}
                         width={250}
                         height={250}
-                        alt="Picture of aws logo"
+                        alt="Picture of github logo"
                         className="object-cover"
+                        priority
                     />
                 </div>
                 <div className="relative w-48 h-48 overflow-hidden rounded-full">
@@ -42,8 +47,9 @@ const AboutMeContents = () => {
                         src={nextjsLogo}
                         width={250}
                         height={250}
-                        alt="Picture of aws logo"
+                        alt="Picture of nextjs logo"
                         className="object-cover"
+                        priority
                     />
                 </div>
             </div>
