@@ -1070,14 +1070,14 @@ where $n$ represents the number of nodes in the tree.
 <br />
 Next, we will transition to the iterative solution. To solve this problem iteratively, we maintain a stack that is a 
 running collection of nodes that have not been processed yet. Initially, the stack is empty and we have a $current\_node$
-pointer set to the root node. Then we need to run a nested while loop. While the $current\_node$ is not $null$ or the length
-of the stack is $\gt 0$, because if the there are items in the stack, that means we still have nodes remaining that must
-be processed, also if the stack is empty, that does not necessarily mean that we are done, because it could be the case that
-the current node has no left children, which would make the stack empty, but there are still nodes remaining to be processed.
-Inside that while loop, we want to have a while loop that traverses down the left subtree and 
-pushes all left children onto the stack, then after that traversal loop, pop from the top of the stack, store the value in
-the result and set the $current\_node = current\_node.right$. After the outer while loop is complete, we will have processed
-all nodes, so just return the result.
+pointer set to the root node. Then we need to run a nested while loop. We set the while loop condition to be: if the 
+$current\_node$ is not $null$ or the length of the stack is $\gt 0$, because if the there are items in the stack, 
+that means we still have nodes remaining that must be processed, also if the stack is empty, that does not necessarily mean 
+that we are done, because it could be the case that the current node has no left children, which would make the stack empty, 
+but there are still nodes remaining to be processed. Inside that while loop, we want to have a while loop that traverses down 
+the left subtree and pushes all left children onto the stack, then after that traversal loop, pop from the top of the stack, 
+store the value in the result and set the $current\_node = current\_node.right$. After the outer while loop is complete, 
+we will have processed all nodes, so just return the result.
 ## Heap Problems
 
 ## Graph Problems

@@ -13,6 +13,7 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { visit } from 'unist-util-visit';
 import remarkToc from 'remark-toc';
 import rehypeSlug from 'rehype-slug';
 import { useMDXComponents } from '@/mdx-components';
@@ -25,6 +26,35 @@ interface PageProps {
   }>;
 }
 
+function cleanSlugs() {
+  return (tree: any) => {
+    visit(tree, 'element', (node) => {
+      // Look for headings with an id attribute
+      if (
+        ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(node.tagName) &&
+        node.properties &&
+        node.properties.id
+      ) {
+        // Remove \uFE0E and \uFE0F from the id string
+        node.properties.id = String(node.properties.id).replace(/[\uFE0E\uFE0F]/g, '')
+      }
+    })
+  }
+}
+
+function cleanLinks() {
+  const anchorTags = document.querySelectorAll('a[href*="%EF%B8%8F"]');
+
+  anchorTags.forEach((tag) => {
+    const currentHref = tag.getAttribute('href');
+
+    if (currentHref) {
+      const cleanedHref = currentHref.replace("%EF%B8%8F", '');
+      tag.setAttribute('href', cleanedHref);
+    }
+  });
+}
+
 export default function BlogPostPage({ params }: PageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [articleContent, setArticleContent] = useState<React.ReactNode | null>(null);
@@ -34,8 +64,6 @@ export default function BlogPostPage({ params }: PageProps) {
     const prepareMDX = async () => {
       const routeResponse = await fetch(`/api/compendium/${slug}`);
       const routeResponseFormatted = await routeResponse.json();
-      console.log('slug', slug);
-      console.log('routeResponseFormatted', routeResponseFormatted);
       const source = routeResponseFormatted.data.articleContent;
       const themeContent = routeResponseFormatted.data.themeContent;
       const mdxOptions: any = {
@@ -48,7 +76,8 @@ export default function BlogPostPage({ params }: PageProps) {
             },
           ],
           rehypeKatex,
-          rehypeSlug
+          rehypeSlug,
+          cleanSlugs
         ],
       };
       const { content } = await compileMDX({
@@ -65,6 +94,20 @@ export default function BlogPostPage({ params }: PageProps) {
     }
     prepareMDX();
   }, []);
+
+  useEffect(() => {
+    cleanLinks()
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    // Remove the '#' symbol to target the raw ID
+    let targetId = hash.replace('#', '');
+    const element = document.getElementById(targetId);
+      console.log('element', element);
+      if (element) {
+        element.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+  }, [articleContent])
 
   return (
     <>
