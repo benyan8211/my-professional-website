@@ -985,18 +985,12 @@ $Time\;Complexity: O(n)$
 <br />
 **Explanation:**
 <br />
-$Space\;Complexity: O(h)$
+$Space\;Complexity: O(n)$
 <br />
-- **In the worst-case,** the binary tree is balanced. 
-- **On each iteration** of the while loop, the algorithm is going one level deeper in the tree and the algorithm is pushing 
-two nodes (the left child and the right child) onto the stack and is popping one node (the parent) off of the top
-of the stack. 
-- **So therefore,** at every level of the tree the stack is accumulating a net total of one node. 
-- **By the time** the algorithm reaches a leaf node, the stack will have $h$ nodes, where $h$ is the height of the tree. 
-- **The leaf node** has no child nodes, so the algorithm has no choice but to pop, which means the stack has just become 
-smaller and the algorithm is now addressing the popped node, which is a node at the level above the leaf node. 
-- **Therefore,** the maximum number of nodes the stack can have during the program's execution is $h$.
-- **Hence,** big $O$ space complexity is $O(h)$.
+- **In the worst-case,** the binary tree is skewed, where the nodes only have right children.
+- **The algorithm** will continuously push the right children of the tree onto the stack without popping any of 
+them until it reaches the leaf node.
+- **Hence,** big $O$ space complexity is $O(n)$.
 <br />
 <BackToTopButton />
 <br />
@@ -1034,7 +1028,7 @@ class Solution:
         self.inorder_traversal_helper(current_node.left, inorder_traversal_values)
         inorder_traversal_values.append(current_node.val)
         self.inorder_traversal_helper(current_node.right, inorder_traversal_values)
-
+    
     def inorder_traversal(self, root: Optional[Self]) -> list[int]:
         inorder_traversal_values = []
         self.inorder_traversal_helper(root, inorder_traversal_values)
@@ -1070,14 +1064,76 @@ where $n$ represents the number of nodes in the tree.
 <br />
 Next, we will transition to the iterative solution. To solve this problem iteratively, we maintain a stack that is a 
 running collection of nodes that have not been processed yet. Initially, the stack is empty and we have a $current\_node$
-pointer set to the root node. Then we need to run a nested while loop. We set the while loop condition to be: if the 
-$current\_node$ is not $null$ or the length of the stack is $\gt 0$, because if the there are items in the stack, 
-that means we still have nodes remaining that must be processed, also if the stack is empty, that does not necessarily mean 
-that we are done, because it could be the case that the current node has no left children, which would make the stack empty, 
-but there are still nodes remaining to be processed. Inside that while loop, we want to have a while loop that traverses down 
-the left subtree and pushes all left children onto the stack, then after that traversal loop, pop from the top of the stack, 
-store the value in the result and set the $current\_node = current\_node.right$. After the outer while loop is complete, 
-we will have processed all nodes, so just return the result.
+pointer set to the root node. We run a nested while loop while there are still nodes left to be processed. We continuously
+push left child nodes onto the stack. Once our pointer is null, we pop from the stack and set our $current\_node$ pointer to 
+the popped node. Add that node's value to the result. Then set $current\_node$ equal to its right child. And repeat until
+there are no more nodes left to process and return the result.
+<br />
+I have implemented the iterative solution below:
+<br />
+```python showLineNumbers
+#Iterative Solution
+from typing import Self, Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[Self] = None, right: Optional[Self] = None):
+        self.val = val
+        self.left = left 
+        self.right = right
+
+class Stack:
+    def __init__(self):
+        self._items = []
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+    def size(self):
+        return len(self._items)
+
+    def push(self, item: str) -> None:
+        self._items.append(item)
+    
+    def pop(self) -> str:
+        if self.is_empty():
+            return None
+        else:
+            return self._items.pop()
+
+class Solution:
+    def inorder_traversal(self, root: Optional[Self]) -> list[int]:
+        stack = Stack()
+        inorder_traversal_values = []
+        current_node = root
+
+        while current_node or stack.size() > 0:
+            while current_node:
+                stack.push(current_node)
+                current_node = current_node.left
+            
+            current_node = stack.pop()
+            inorder_traversal_values.append(current_node.val)
+            current_node = current_node.right
+        
+        return inorder_traversal_values
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** must visit every single node in the tree exactly once.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+**Explanation:**
+<br />
+$Space\;Complexity: O(n)$
+<br />
+- **In the worst-case,** the binary tree is skewed, where the nodes only have left children.
+- **The algorithm** will continuously push the left children of the tree onto the stack without popping any of 
+them until it reaches the leaf node.
+- **Hence,** big $O$ space complexity is $O(n)$.
+<br /> 
 ## Heap Problems
 
 ## Graph Problems
