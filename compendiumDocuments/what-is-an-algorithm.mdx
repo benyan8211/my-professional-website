@@ -570,6 +570,181 @@ of inputs.
 <br />
 <BackToTopButton />
 <br />
+### ⚜️&nbsp;&nbsp;Merge Sort
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given an unsorted array of integers, implement the Merge Sort algorithm 
+and return the array sorted.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;Merge Sort is an efficient, comparison-based, stable sorting algorithm. It 
+divides the array in half and then divides the halves of the array into halves and so on until each half contains only
+one element (or is empty). And then the algorithm recombines the halves as sorted by comparing values until it gets back the 
+original array in sorted order.
+<br />
+This algorithm can be implemented recursively and iteratively.
+<br />
+The recursive solution is that it finds the midpoint of the input array $arr$ and then divides the array into two halves based
+on that midpoint. The function then calls itself on the left half and on the right half. The base case is if length of $arr$
+is $ \leq 1$, then return. Then lastly it will call an iterative helper function called $merge$ to perform the actual comparison
+of elements and merging of the arrays. The iterative function will compare each element of the left half with each element of 
+the right half and will append the smaller of the two elements to the resulting sorted array. If the two subarrays are of different 
+lengths, any elements left over from one of the subarrays will be appended to the end of the sorted array 
+as the leftover elements from the one subarray are larger than all of the elements 
+of the other subarray. At the end, return the sorted array.
+<br />
+I have implemented the recursive solution below:
+<br />
+```python showLineNumbers
+# Recursive Solution
+class Solution:
+    def merge(self, left_half: list[int], right_half: list[int]) -> list[int]:
+        sorted_arr = []
+        left_half_index = 0
+        right_half_index = 0
+
+        while left_half_index < len(left_half) and right_half_index < len(right_half):
+            if left_half[left_half_index] < right_half[right_half_index]:
+                sorted_arr.append(left_half[left_half_index])
+                left_half_index += 1
+            else:
+                sorted_arr.append(right_half[right_half_index])
+                right_half_index += 1
+        
+        while left_half_index < len(left_half):
+            sorted_arr.append(left_half[left_half_index])
+            left_half_index += 1
+
+        while right_half_index < len(right_half):
+            sorted_arr.append(right_half[right_half_index])
+            right_half_index += 1
+
+        return sorted_arr
+
+    def merge_sort(self, arr: list[int]) -> list[int]:
+        # Base Case: arrays with 0 or 1 elements are already sorted, so just return
+        if len(arr) <= 1:
+            return arr;
+        
+        # Calculate the midpoint
+        mid = len(arr) // 2
+
+        # Recursively divide the array into two halves
+        left_half = self.merge_sort(arr[:mid])
+        right_half = self.merge_sort(arr[mid:])
+
+        # Merge the arrays back up in sorted order
+        return self.merge(left_half, right_half)
+```
+<br />
+$Time\;Complexity: O(nlog\;n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** continuously divides the array of size $n$ into halves until it reaches the base case of having an array 
+of size 0 or 1. 
+- **The number of times** you can divide $n$ before it reaches 1 is $log_2(n)$.
+- **When the algorithm** merges back the subarrays by doing comparisons, it needs to merge back the subarrays in different 
+stages. 
+- **For example,** an algorithm might first need to merge 8 individual elements into 4 pairs and then 4 pairs into 2
+quartets, and then 2 quartets into the final solution. 
+- **At every stage** of the merge, the number of elements that need to be compared is the same. 
+- **In our example,** that number is 8. So it requires $O(n)$ operations at every step of the merge.
+- **The total number of operations** computes to $n\;•\;log_2(n)$.
+- **Hence,** the big $O$ time complexity is $O(nlog\;n)$
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **During the algorithm's merge process,** the algorithm needs to store a combined total of $n$ elements in temporary arrays.
+- **The recursion call stack** is propotional to $log_2(n)$ since the number of times the algorithm needs to divide an input
+array of size $n$ into subarrays before it reaches the base case of an array of size $0$ or $1$ is $log_2(n)$.
+- **Since** $O(n)$ is much larger than $O(log\;n)$, the big $O$ space complexity is $O(n)$.
+<br />
+Now, let us transition to the iterative solution of Merge Sort. In the iterative solution, we want to perform the merge
+using a bottom-up approach. Meaning we will start with merging two sub arrays of size 1, and then two subarrays of size 2,
+and then two subarrays of size 4 and so on. We will use a variable to maintain the size of the subarrays we are currently
+merging and variables to maintain the indexes of where each subarray begins and ends. Then we loop through the subarrays
+comparing elements between the subarrays and storing the smaller of the two and incrementing that subarray's index.
+Also if any of the subarrays have leftover elements, add the leftover elements to the sorted subarray.
+In the end, we copy the sorted elements back over the original ones.
+<br />
+I have implemented the iterative solution below:
+<br />
+```python showLineNumbers
+# Iterative Solution
+class Solution:
+    def merge(self, arr: list[int], left_index: int, middle_index: int, right_index: int) -> None:
+        sorted_subarray = []
+        i = left_index
+        j = middle_index
+
+        # Compare values
+        while i < middle_index and j < right_index:
+            if arr[i] <= arr[j]:
+                sorted_subarray.append(arr[i])
+                i += 1
+            else:
+                sorted_subarray.append(arr[j])
+                j += 1
+        
+        # Add any leftover values to sorted subarray
+        while i < middle_index:
+            sorted_subarray.append(arr[i])
+            i += 1
+
+        # Add any leftover values to sorted subarray
+        while j < right_index:
+            sorted_subarray.append(arr[j])
+            j += 1
+        
+        # Copy sorted subarray values over the originals
+        for k in range(len(sorted_subarray)):
+            arr[left_index + k] = sorted_subarray[k]
+
+    def merge_sort(self, arr: list[int]) -> list[int]:
+        size_of_subarray = 1
+
+        while size_of_subarray < len(arr):
+            for i in range(0, len(arr), 2 * size_of_subarray):
+                # Left subarray [i to middle_index - 1]. Right subarray [middle_index to right].
+                left_index = i 
+                middle_index = i + size_of_subarray
+                right_index = middle_index + size_of_subarray
+
+                # Clamp down value of right
+                if right_index > len(arr):
+                    right_index = len(arr)
+
+                # Merge subarrays only if second subarray exists
+                if middle_index < len(arr):
+                    self.merge(arr, left_index, middle_index, right_index)
+            
+            size_of_subarray *= 2
+
+        return arr
+```
+<br />
+$Time\;Complexity: O(nlog\;n)$
+<br />
+**Explanation:**
+<br />
+- **The outer loop** iterates $log_2(n)$ times because the size of the subarray starts at $1$ and doubles each time
+until it equals or exceeds $n$. The number of times you can double a number starting with $1$ until it reaches $n$ is $log_2(n)$.
+- **For every run of the outer loop**, the inner loop steps through the entire array by partitioning the array into subarrays
+then merging the subarrays by doing comparisons. Therefore, the number of operations that the inner loop performs is 
+proportional to $O(n)$.
+- **Therefore,** the total number of operations for the entire algorithm is proportional to $n\;•\;log\;n$.
+- **Hence,** the big $O$ time complexity is $O(nlog\;n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **During the algorithm's final merge process,** the array called $sorted\_subarray$ will hold $n$ elements.
+- **Hence,** the big $O$ space complexity is $O(n)$.
+<br />
+<BackToTopButton />
+<br />
 ## Linked List Problems
 <br />
 ### ⚜️&nbsp;&nbsp;Reverse Linked List
