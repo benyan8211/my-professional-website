@@ -864,9 +864,9 @@ current node first, processes its entire left subtree, and then moves to its rig
 **<u>Solution:</u>**&nbsp;&nbsp;This problem can be solved recursively and iteratively.
 <br />
 First the recursive solution is to create a recursive function that takes as input a TreeNode and the list of preorder node
-values and to recursively add $node.val$ to the list and then recursively call itself on $node.left$ and then on $node.right$.
-The base case of the recursive function is to return if the node passed in as input is $null$. After the recursion is complete,
-return the list of preorder node values.
+values and to recursively add $current\_node.val$ to the list and then recursively call itself on $current\_node.left$ and then 
+on $current\_node.right$. The base case of the recursive function is to return if the node passed in as input is $null$. 
+After the recursion is complete, return the list of preorder node values.
 <br />
 I have implemented the solution recursively:
 <br />
@@ -885,6 +885,7 @@ class Solution:
         if not current_node:
             return
         
+        # This recursive order matches the preorder traversal Root -> Left -> Right
         preorder_traversal_values.append(current_node.val)
         self.preorder_traversal_helper(current_node.left, preorder_traversal_values)
         self.preorder_traversal_helper(current_node.right, preorder_traversal_values)
@@ -967,6 +968,9 @@ class Solution:
             node = stack.pop()
             preorder_traversal_values.append(node.val)
 
+            # We first push right onto the stack, because then the stack will have top to bottom order: Left, Right.
+            # Root is the first node to be popped, then Left, then Right. 
+            # Therefore structure Root -> Left -> Right is maintained.
             if node.right:
                 stack.push(node.right)
 
@@ -1003,10 +1007,10 @@ Lastly, process the right subtree.
 <br />
 **<u>Solution:</u>**&nbsp;&nbsp;This problem can be solved recursively and iteratively.
 <br />
-First the recursive solution is to create a recursive function that takes as input a TreeNode and the list of inorder node
-values and to perform a recursive call on $node.left$. Then add the input node's value to the list of inorder node values.
-Lastly, perform a recursive call on $node.right$. The base case is to return when the input node is $null$. After the recursion
-is complete, return the list of inorder node values.
+First the recursive solution is to create a recursive function that takes as input a TreeNode called $current\_node$ and the list 
+of inorder node values and to perform a recursive call on $current\_node.left$. Then add the input node's value to the list of 
+inorder node values. Lastly, perform a recursive call on $current\_node.right$. The base case is to return when the input node 
+is $null$. After the recursion is complete, return the list of inorder node values.
 <br />
 I have implemented the recursive solution below:
 <br />
@@ -1025,6 +1029,7 @@ class Solution:
         if not current_node:
             return
         
+        # This recursive order matches inorder traversal: Left -> Root -> Right
         self.inorder_traversal_helper(current_node.left, inorder_traversal_values)
         inorder_traversal_values.append(current_node.val)
         self.inorder_traversal_helper(current_node.right, inorder_traversal_values)
@@ -1102,15 +1107,30 @@ class Stack:
 
 class Solution:
     def inorder_traversal(self, root: Optional[Self]) -> list[int]:
+
+        # stack holds running collection of nodes not yet processed.
         stack = Stack()
+
+        # The list of inorder traversal values.
         inorder_traversal_values = []
+
+        # The current node initially set as root.
         current_node = root
 
-        while current_node or stack.size() > 0:
+        # If current_node is not null or stack size is non empty, there are still nodes not yet processed.
+        while current_node or not stack.is_empty():
+            # We always process left children first so we continuously push left children 
+            # onto the stack until there are no more on that branch.
             while current_node:
                 stack.push(current_node)
                 current_node = current_node.left
             
+            # This structure ensures that the current_node is the leftmost child
+            # of this branch, that has not been processed yet.
+            # All of it's left children (if any) have been processed already.
+            # And so we then process this current_node.
+            # And then now it is free to examine it's right children branch (if any).
+            # Thus keeping with the Left -> Root -> Right structure.
             current_node = stack.pop()
             inorder_traversal_values.append(current_node.val)
             current_node = current_node.right
@@ -1133,7 +1153,275 @@ $Space\;Complexity: O(n)$
 - **The algorithm** will continuously push the left children of the tree onto the stack without popping any of 
 them until it reaches the leaf node.
 - **Hence,** big $O$ space complexity is $O(n)$.
-<br /> 
+<br />
+<BackToTopButton />
+<br />
+### ⚜️&nbsp;&nbsp;Binary Tree Postorder Traversal
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given the root of a binary tree, return the postorder traversal of its nodes' values.
+<br />
+**Postorder Traversal (Left &rarr; Right &rarr; Root):** At first process the left subtree. Then process the right subtree.
+Lastly, visit the root node.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;This problem can be solved recursively and iteratively.
+<br />
+First the recursive solution is to create a recursive function that takes as input a TreeNode called $current\_node$ and the 
+list of postorder traversal values. First perform a recursive call on $current\_node.left$. Then perform a recursive call on 
+$current\_node.right$. Lastly, append the input node's value to the list of postorder traversal values. The base case is when
+the input node is $null$, then return. After the recursion is complete, return the list of postorder traversal values.
+<br />
+I have implemented the recursive solution below:
+<br />
+```python showLineNumbers
+#Recursive Solution
+from typing import Self, Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[Self] = None, right: Optional[Self] = None):
+        self.val = val
+        self.left = left 
+        self.right = right
+
+class Solution:
+    def postorder_traversal_helper(self, current_node: Optional[Self], postorder_traversal_values: list[int]) -> None:
+        if not current_node:
+            return
+        
+        # This recursive order matches postorder traversal Left -> Right -> Root
+        self.postorder_traversal_helper(current_node.left, postorder_traversal_values)
+        self.postorder_traversal_helper(current_node.right, postorder_traversal_values)
+        postorder_traversal_values.append(current_node.val)
+    
+    def postorder_traversal(self, root: Optional[Self]) -> list[int]:
+        postorder_traversal_values = []
+        self.postorder_traversal_helper(root, postorder_traversal_values)
+        return postorder_traversal_values
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** must visit every single node in the tree exactly once.
+- **Therefore,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **Stack Frame:** A new stack frame is created for each recursive call, and the total memory required is proportional 
+to the number of recursive calls.
+- **The number of** active stack frames is proportional to the height of the tree, because each recursive function call 
+corresponds to the algorithm traversing down one level from the current node to a child node (left or right). The algorithm
+will accumulate stack frames until it reaches a leaf node. A leaf node has no recursive calls to make, because it has no child
+nodes, and so it will not create new stack frames. Since a leaf node has no children, it has no choice but to return and 
+this will cause the algorithm to traverse up one level, thereby releasing a stack frame from active use. After one subtree
+has been traversed, the algorithm will have released all stack frames accumulated during that subtree traversal before it 
+traverses the next subtree.
+- **Therefore,** the maximum number of active frames that the program has at any point during its execution is directly 
+determined by the height of the tree.
+- **In the worst-case,** we have a skewed binary tree, where every node has at most one child node. Instead of branching
+out, the tree grows linearly, rendering a configuration of the nodes that yields the maximum possible height $n-1$,
+where $n$ represents the number of nodes in the tree.
+- *Hence,* the big $O$ space complexity is $O(n)$
+<br />
+Next, we will transition to the iterative solution. There are two different ways to solve this problem iteratively.
+One way is to use two stacks. The other way is to use one stack.
+<br />
+To solve this problem iteratively using two stacks, we maintain two stacks $stack1$ and
+$stack2$. $stack1$ is designed to store the reverse of the postorder traversal which is Root &rarr; Right &rarr; Left.
+$stack2$ is designed to hold the reverse of $stack1$, which is our postorder traversal Left  &rarr; Right  &rarr; Root.
+We begin with $stack1$ holding the root node, and $stack2$ is empty. We loop while $stack1$ is not empty. 
+We pop from $stack1$ and store it in a pointer called $current\_node$ and push that node
+onto $stack2$. By popping from $stack1$ and pushing onto $stack2$, we are making $stack2$ the reverse the order of $stack1$. 
+Then if the $current.left$ then push $current.left$ onto $stack1$. If $current.right$, then push $current.right$ onto $stack1$.
+Why do we push $.left$ first and then $.right$? It is because of the LIFO property of stack. This will result in 
+$stack2$ having the order from bottom to top: Root &rarr; Right &rarr; Left. Then when $stack2$ pops, it will have the order
+Left &rarr; Right &rarr; Root, which is the order that we want. Keep repeating this loop until $stack1$ is empty, which means
+that all of the nodes have been visited once, and then while $stack2$ is not empty, push the popped values into the 
+postorder_traversal_values array and after the loop return postorder_traversal_values.
+<br />
+```python showLineNumbers
+#Iterative Two Stack Solution
+from typing import Self, Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[Self] = None, right: Optional[Self] = None):
+        self.val = val
+        self.left = left 
+        self.right = right
+
+class Stack:
+    def __init__(self):
+        self._items = []
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+    def size(self):
+        return len(self._items)
+
+    def push(self, item: str) -> None:
+        self._items.append(item)
+    
+    def pop(self) -> str:
+        if self.is_empty():
+            return None
+        else:
+            return self._items.pop()
+
+class Solution:
+    def postorder_traversal(self, root: Optional[Self]) -> list[int]:
+
+        # Maintains reverse of postorder traversal with top to bottom order: Root, Right, Left.
+        stack1 = Stack()
+
+        # Maintains reverse of stack1 with top to bottom order: Left, Right, Root. 
+        # Because of LIFO property, Left is on the top of the stack.
+        stack2 = Stack()
+
+        # Stores values of the postorder_traversal
+        postorder_traversal_values = []
+
+        # Initially stack1 will have root, making root be placed at the bottom of stack2.
+        stack1.push(root)
+
+        while not stack1.is_empty():
+            current_node = stack1.pop()
+
+            # Pushing the popped value of stack1 onto stack2 reverses the order of stack1
+            stack2.push(current_node)
+
+            # We want to push left onto stack1 first. That way stack1 holds top to bottom: Right, Left.
+            # So then stack2 will have the reverse top to bottom order: Left, Right, which is what we want because LIFO.
+            if current_node.left:
+                stack1.push(current_node.left)
+
+            if current_node.right:
+                stack1.push(current_node.right)
+        
+        # stack2 will contain nodes in top to bottom order: Left, Right, Root, which is what we want because LIFO.
+        while not stack2.is_empty():
+            current_node = stack2.pop()
+            postorder_traversal_values.append(current_node.val)
+
+        return postorder_traversal_values
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** must visit every single node in the tree exactly once.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+**Explanation:**
+<br />
+$Space\;Complexity: O(n)$
+<br />
+- **In the worst-case,** the binary tree is skewed, where the nodes only have left children.
+- **The algorithm** will continuously push the left children of the tree onto the $stack1$ without popping any of 
+them until it reaches the leaf node.
+- **Then by the time,** all nodes have been popped from $stack1$, they will have been pushed onto $stack2$.
+- **Hence,** big $O$ space complexity is $O(n)$.
+<br />
+Next, we will transition to the iterative solution of this problem using only one stack. This problem is challenging
+because the algorithm must visit both left subtree and right subtree before evaluating the root. Therefore, the core 
+idea behind the one stack solution of this problem is that for every node that we encounter that is not a left child, 
+we need to evaluate if this node is the parent node's right child. If so, then the algorithm must traverse down the 
+parent's right subtree, before the algorithm can evaluate the parent. Only after the parent's right child has been popped 
+from the stack, can we say that the parent node's right subtree has been evaluated and only then can we evaluate the 
+parent node.
+<br />
+```python showLineNumbers
+#Iterative One Stack Solution
+from typing import Self, Optional
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Optional[Self] = None, right: Optional[Self] = None):
+        self.val = val
+        self.left = left 
+        self.right = right
+
+class Stack:
+    def __init__(self):
+        self._items = []
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+    def size(self):
+        return len(self._items)
+
+    def peek(self):
+        return self._items[-1]
+
+    def push(self, item: str) -> None:
+        self._items.append(item)
+    
+    def pop(self) -> str:
+        if self.is_empty():
+            return None
+        else:
+            return self._items.pop()
+
+class Solution:
+    def postorder_traversal(self, root: Optional[Self]) -> list[int]:
+
+        # Maintains a running collection of nodes not yet processed
+        stack = Stack()
+
+        # Stores values of the postorder_traversal
+        postorder_traversal_values = []
+
+        # Set currrent_node equal to the root
+        current_node = root
+
+        while current_node or not stack.is_empty():
+            # If current_node is pointing to a node, push it onto the stack and make current_node its left child.
+            # Left child because we want to traverse down the left child branch (if any) until it has been exhausted.
+            if current_node:
+                stack.push(current_node)
+                current_node = current_node.left
+            # After left child branch (if any) has been exhausted, 
+            # check into right child branch (if any).
+            elif stack.peek().right:
+                current_node = stack.peek().right
+            # Left child branch (if any) and right child branch (if any) 
+            # have both been exhausted. Time to pop from the stack.
+            else:
+                evaluated_node = stack.pop()
+                postorder_traversal_values.append(evaluated_node.val)
+
+                # If the currently evaluated node is the right child the parent, 
+                # that means that the left and right subtree of the parent have been evaluated.
+                # And so the parent can be popped. Continue popping while this is the case,
+                # and stack is not empty.
+                while not stack.is_empty() and evaluated_node == stack.peek().right:
+                    evaluated_node = stack.pop()
+                    postorder_traversal_values.append(evaluated_node.val)
+            
+        return postorder_traversal_values
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** must visit every single node in the tree exactly once.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+**Explanation:**
+<br />
+$Space\;Complexity: O(n)$
+<br />
+- **In the worst-case,** the binary tree is skewed, where the nodes only have left children.
+- **The algorithm** will continuously push the left children of the tree onto the $stack$ without popping any of 
+them until it reaches the leaf node.
+- **Hence,** big $O$ space complexity is $O(n)$.
+<br />
+<BackToTopButton />
+<br />
 ## Heap Problems
 
 ## Graph Problems
