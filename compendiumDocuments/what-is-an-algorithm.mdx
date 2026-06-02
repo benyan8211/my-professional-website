@@ -641,7 +641,12 @@ $Time\;Complexity: O(nlog\;n)$
 <br />
 - **The algorithm** continuously divides the array of size $n$ into halves until it reaches the base case of having an array 
 of size 0 or 1. 
-- **The number of times** you can divide $n$ before it reaches 1 is $log_2(n)$.
+- **The number of times** you can divide $n$ before it reaches 1 is $log_2(n)$. The reason is given below:
+- **At the first step,** the array size is $n$.
+- **At the second step,** the subarray size is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the subarray size is $\frac{n}{2^k}$.
+- **The recursion stops** when the subarray size is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
 - **When the algorithm** merges back the subarrays by doing comparisons, it needs to merge back the subarrays in different 
 stages. 
 - **For example,** an algorithm might first need to merge 8 individual elements into 4 pairs and then 4 pairs into 2
@@ -657,7 +662,13 @@ $Space\;Complexity: O(n)$
 <br />
 - **During the algorithm's merge process,** the algorithm needs to store a combined total of $n$ elements in temporary arrays.
 - **The recursion call stack** is propotional to $log_2(n)$ since the number of times the algorithm needs to divide an input
-array of size $n$ into subarrays before it reaches the base case of an array of size $0$ or $1$ is $log_2(n)$.
+array of size $n$ into subarrays before it reaches the base case of an array of size $0$ or $1$ is $log_2(n)$. The reason is
+given below:
+- **At the first step,** the array size is $n$.
+- **At the second step,** the subarray size is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the subarray size is $\frac{n}{2^k}$.
+- **The recursion stops** when the subarray size is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
 - **Since** $O(n)$ is much larger than $O(log\;n)$, the big $O$ space complexity is $O(n)$.
 <br />
 Now, let us transition to the iterative solution of Merge Sort. In the iterative solution, we want to perform the merge
@@ -730,6 +741,12 @@ $Time\;Complexity: O(nlog\;n)$
 <br />
 - **The outer loop** iterates $log_2(n)$ times because the size of the subarray starts at $1$ and doubles each time
 until it equals or exceeds $n$. The number of times you can double a number starting with $1$ until it reaches $n$ is $log_2(n)$.
+The reason is given below:
+- **At the first step,** the array size is $n$.
+- **At the second step,** the subarray size is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the subarray size is $\frac{n}{2^k}$.
+- **If the $\mathbf{k^{th}}$ step,** is  when the subarray size is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
 - **For every run of the outer loop**, the inner loop steps through the entire array by partitioning the array into subarrays
 then merging the subarrays by doing comparisons. Therefore, the number of operations that the inner loop performs is 
 proportional to $O(n)$.
@@ -742,6 +759,281 @@ $Space\;Complexity: O(n)$
 <br />
 - **During the algorithm's final merge process,** the array called $sorted\_subarray$ will hold $n$ elements.
 - **Hence,** the big $O$ space complexity is $O(n)$.
+<br />
+<BackToTopButton />
+<br />
+### ⚜️&nbsp;&nbsp;Quicksort
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given an unsorted array of integers, implement the Quicksort algorithm 
+and return the array sorted.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;Quicksort is a highly efficient, comparison-based sorting algorithm. It works by selecting 
+an element from the array to act as a baseline. This element is called the "pivot". This can be the first element, the last
+element, a random element, or the median. The algorithm then partitions the array by rearranging the elements such that the 
+elements smaller than or equal to the pivot are to its left and elements larger than the pivot are to its right. The exact
+same steps are then applied to the left and right partitions and to their partitions and so on until the partitions are of 
+size $0$ or $1$, which means that the array has been sorted.
+<br />
+This algorithm can be implemented recursively and iteratively.
+<br />
+For the recursive implementation, the algorithm uses two pointers. The first pointer $low$ initially points at index $0$
+and represents the index where the partition begins. The second pointer $high$ initially points at index $len(arr) - 1$
+and represents where the partition ends. The algorithm only runs when low < high. The base case is once $low = high$, there 
+is only 1 element in our partition, and when $low \gt high$ there are no elements in our partition, and so the algorithm
+returns. Our implementation uses the Lomuto partition scheme, which means the last element of a partition is the pivot.
+The algorithm calls the partition function which takes the last element as the pivot, and places the pivot in the correct
+position and places all elements smaller than the pivot to be before the pivot and all elements greater than the pivot to 
+be after the pivot. It accomplishes this rearrangement of elements by utilizing a loop and a pointer keeping track of the 
+highest index of the left partition. Then after the partition is complete, the recursive function calls itself on the left 
+partition and calls itself on the right partition. Once the base case is reached, the recursive function returns, and the
+sorting is complete. The original function can return $arr$ as the result.
+<br />
+I have implemented the recursive solution below:
+<br />
+```python showLineNumbers
+# Recursive Solution
+class Solution:
+    def partition(self, arr: list[int], low: int, high: int) -> int:
+        # The pivot is set as the last element of the partition.
+        pivot = arr[high]
+
+        # Initial highest index of left partition.
+        highest_index_left_partition = low - 1
+
+        # Loop through partition and position elements <= pivot in left partition.
+        for partition_iterator in range(low, high):
+            if arr[partition_iterator] <= pivot:
+                # Increment highest index of left partition.
+                highest_index_left_partition += 1
+                # Swap elements.
+                previous_highest_element_left_partition = arr[highest_index_left_partition]
+                arr[highest_index_left_partition] = arr[partition_iterator]
+                arr[partition_iterator] = previous_highest_element_left_partition
+
+        # Position pivot such that it is the next element after left partition.
+        pivot_index = highest_index_left_partition + 1
+        pivot_index_old_value = arr[pivot_index]
+        arr[pivot_index] = arr[high]
+        arr[high] = pivot_index_old_value
+
+        return pivot_index
+
+    def quicksort_helper(self, arr: list[int], low: int, high: int) -> None:
+        # The Base Case: If low == high there is only 1 element in the partition, 
+        # if low > high, there are 0 elements in the partition, so return.
+        if low == high or low > high:
+            return
+
+        # Place pivot in correct position with smaller elements in left partition
+        # and greater elements in right partition.
+        pivot_index = self.partition(arr, low, high)
+
+        # Recursively call quicksort_helper on left and right partitions
+        self.quicksort_helper(arr, low, pivot_index - 1)
+        self.quicksort_helper(arr, pivot_index + 1, high)
+
+    def quicksort(self, arr: list[int]) -> list[int]:
+        low = 0
+        high = len(arr) - 1
+        self.quicksort_helper(arr, low, high)
+        return arr
+```
+<br />
+$Time\;Complexity:\;O(nlog\;n)\;for\;average\;case\;and\;O(n^2)\;for\;worst\;case$
+<br />
+**Explanation for Average Case:**
+<br />
+- **In the average case,** the pivot splits the array into roughly equal halves. 
+- **If you have** an input array of length $n$, it will take $log_2(n)$ divisions before it reaches sub-arrays of length 1.
+The reason is given below:
+- **At the first step,** the partition size is $n$.
+- **At the second step,** the partition size is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the partition size is $\frac{n}{2^k}$.
+- **The recursion stops** when the partition size is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
+- **For every array partition**, regardless of the resulting partition size, be it partitions of length 8, 4, or 2, 
+the collective partition function calls for the partitions of each length must loop through all of the elements, 
+requiring $O(n)$ operations.
+- **Hence,** the big $O$ time complexity for average case is $O(nlog\;n)$.
+<br />
+**Explanation for Worst Case:**
+<br />
+- **In the worst-case,** the array is already sorted and the pivot is either the smallest or largest element in the array. 
+This will not split the array into roughly even partitions. Quite the contrary, it will split the array into a partition with 
+$0$ elements, and another partition with $n - 1$ elements. Then the next iteration will have paritions of size $1$ and $n - 2$ 
+and so on.
+- This will produce a recursion tree with steps totalling: $n + (n - 1) + (n - 2) + ... + 1 = O(n^2)$.
+- **Hence,** big $O$ time complexity for worst case is $O(n^2)$.
+<br />
+$Space\;Complexity:\;O(log\;n)\;in\;average\;case\;and\;O(n)\;in\;worst\;case$
+<br />
+**Explanation for Average Case:**
+<br />
+- **In the average case,** the pivot splits the array into roughly equal halves. 
+- **The recursion call stack** is propotional to $log_2(n)$ since the number of times the algorithm needs to divide an input
+array of size $n$ into partitions before it reaches the base case of an array of size $0$ or $1$ is $log_2(n)$. The reason is
+given below:
+- **At the first step,** the partition size is $n$.
+- **At the second step,** the partition size is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the partition size is $\frac{n}{2^k}$.
+- **The recursion stops** when the partition size is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
+- **Hence,** the big $O$ space complexity for average case is $O(log\;n)$.
+<br />
+**Explanation for Worst Case:**
+<br />
+- **In the worst-case,** the array is already sorted and the pivot is either the smallest or largest element in the array. 
+This will not split the array into roughly even partitions. Quite the contrary, it will split the array into a partition with 
+$0$ elements, and another partition with $n - 1$ elements. Then the next iteration will have paritions of size $1$ and $n - 2$ 
+and so on.
+- This means for an input array of size $n$, the algorithm will process only $1$ element for each recursive call, resulting in
+$n$ recursive calls.
+- **Hence,** big $O$ space complexity for worst case is $O(n)$.
+<br />
+Now, we will transition to the iterative implementation. We will use a stack to maintain partition boundaries. The stack will
+initially contain the tuple $(low, high)$ where $low$ is $0$ and $high$ is $len(arr) - 1$. Then we have a while loop: while the 
+stack is not empty, pop from the stack and plug in low boundary and high boundary values from the tuple into the partition 
+function. The partition function will work in the same way as in the recursive case. Our implementation uses the Lomuto 
+partition scheme, which means the last element of a partition is the pivot. The algorithm calls the partition function which 
+takes the last element as the pivot, and places the pivot in the correct position and places all elements smaller than the pivot
+to be before the pivot and all elements greater than the pivot to be after the pivot. It accomplishes this rearrangement of 
+elements by utilizing a loop and a pointer keeping track of the highest index of the left partition. After the 
+partition is complete, using the index of the correctly placed pivot element, it will push tuples of the index boundaries of 
+the left and right partitions onto the stack. This while loop will keep repeating the process until the stack is empty. 
+After the while loop, the sorting is now complete, and the function can return $arr$.
+<br />
+I have implemented the iterative solution below:
+<br />
+```python showLineNumbers
+# Iterative Solution
+class Stack:
+    def __init__(self):
+        self._items = []
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+    def size(self):
+        return len(self._items)
+
+    def push(self, item: str) -> None:
+        self._items.append(item)
+    
+    def pop(self) -> str:
+        if self.is_empty():
+            return None
+        else:
+            return self._items.pop()
+
+class Solution:
+    def partition(self, arr: list[int], low: int, high: int) -> int:
+        # The pivot is set as the last element of the partition.
+        pivot = arr[high]
+
+        # Initial highest index of left partition.
+        highest_index_left_partition = low - 1
+
+        # Loop through partition and position elements <= pivot in left partition.
+        for partition_iterator in range(low, high):
+            if arr[partition_iterator] <= pivot:
+                # Increment highest index of left partition.
+                highest_index_left_partition += 1
+                # Swap elements.
+                previous_highest_element_left_partition = arr[highest_index_left_partition]
+                arr[highest_index_left_partition] = arr[partition_iterator]
+                arr[partition_iterator] = previous_highest_element_left_partition
+
+        # Position pivot such that it is the next element after left partition.
+        pivot_index = highest_index_left_partition + 1
+        pivot_index_old_value = arr[pivot_index]
+        arr[pivot_index] = arr[high]
+        arr[high] = pivot_index_old_value
+
+        return pivot_index
+
+    def quicksort(self, arr: list[int]) -> list[int]:
+        # stack holds tuples containing indices for partition boundaries
+        stack = Stack()
+
+        # low represents lower bound of partition.
+        # high represents upper bound of partition. 
+        low = 0
+        high = len(arr) - 1
+
+        # Push initial partition boundary onto stack
+        stack.push((low, high))
+        
+        # While there are still partitions that need to be processed
+        while not stack.is_empty():
+            # Retrieve new partition bound values
+            low, high = stack.pop()
+
+            # If low < high, this means this partition is of size > 1
+            # and so it needs to be processed
+            if low < high:
+                # Place pivot in correct position with smaller elements in left partition
+                # and greater elements in right partition.
+                pivot_index = self.partition(arr, low, high)
+
+                # Push partition boundaries of left partition onto the stack
+                stack.push((low, pivot_index - 1))
+                # Push partition boundaries of right partition onto the stack
+                stack.push((pivot_index + 1, high))
+        
+        return arr
+```
+<br />
+$Time\;Complexity:\;O(nlog\;n)\;for\;average\;case\;and\;O(n^2)\;for\;worst\;case$
+<br />
+**Explanation for Average Case:**
+<br />
+- **In the average case,** the pivot splits the array into roughly equal halves. 
+- **If you have** an input array of length $n$, it will take $log_2(n)$ divisions before it reaches sub-arrays of length 1.
+The reason is given below:
+- **At the first step,** the partition size is $n$.
+- **At the second step,** the partition size is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the partition size is $\frac{n}{2^k}$.
+- **If the $\mathbf{k^{th}}$ step,** is when the partition size is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
+- **For every array partition**, regardless of the resulting partition size, be it partitions of length 8, 4, or 2, 
+the collective partition function calls for the partitions of each length must loop through all of the elements, 
+requiring $O(n)$ operations.
+- **Hence,** the big $O$ time complexity for average case is $O(nlog\;n)$.
+<br />
+**Explanation for Worst Case:**
+<br />
+- **In the worst-case,** the array is already sorted and the pivot is either the smallest or largest element in the array. 
+This will not split the array into roughly even partitions. Quite the contrary, it will split the array into a partition with 
+$0$ elements, and another partition with $n - 1$ elements. Then the next iteration will have paritions of size $1$ and $n - 2$ 
+and so on.
+- The total number of steps are: $n + (n - 1) + (n - 2) + ... + 1 = O(n^2)$.
+- **Hence,** big $O$ time complexity for worst case is $O(n^2)$.
+<br />
+$Space\;Complexity:\;O(log\;n)\;in\;average\;case\;and\;O(n)\;in\;worst\;case$
+<br />
+**Explanation for Average Case:**
+<br />
+- **In the average case,** the pivot splits the array into roughly equal halves. 
+- **The recursion call stack** is propotional to $log_2(n)$ since the number of times the algorithm needs to divide an input
+array of size $n$ into partitions before it reaches the base case of an array of size $0$ or $1$ is $log_2(n)$. The reason is
+given below:
+- **At the first step,** the partition size is $n$.
+- **At the second step,** the partition size is $\frac{n}{2}$.
+- **At the $\mathbf{k^{th}}$ step,** the partition size is $\frac{n}{2^k}$.
+- **If the $\mathbf{k^{th}}$ step,** is when the partition size is $1$, meaning $\frac{n}{2^k} = 1$. This simplifies to $n = 2^{k}$.
+- **Solving for $\mathbf{k}$** gives $k = log_2(n)$, which means that the algorithm took $log_2(n)$ steps.
+- **Hence,** the big $O$ space complexity for average case is $O(log\;n)$.
+<br />
+**Explanation for Worst Case:**
+<br />
+- **In the worst-case,** the array is already sorted and the pivot is either the smallest or largest element in the array. 
+This will not split the array into roughly even partitions. Quite the contrary, it will split the array into a partition with 
+$0$ elements, and another partition with $n - 1$ elements. Then the next iteration will have paritions of size $1$ and $n - 2$ 
+and so on.
+- This means for an input array of size $n$, due to the highly unbalanced nature of the partition sizes and the 
+fact that the array is already sorted, the algorithm will push boundary indices onto the stack in a fixed order from left
+to right, causing the stack to accumulate a linear chain of boundary indices.
+- **Hence,** big $O$ space complexity for worst case is $O(n)$.
 <br />
 <BackToTopButton />
 <br />
