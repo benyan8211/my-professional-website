@@ -1152,6 +1152,7 @@ of inputs.
 <br />
 <BackToTopButton />
 <br />
+## Hash Table Problems
 ## Stack Problems
 <br />
 ### ⚜️&nbsp;&nbsp;Valid Parentheses
@@ -1890,7 +1891,333 @@ them until it reaches the leaf node.
 <BackToTopButton />
 <br />
 ## Heap Problems
+<br />
+### ⚜️&nbsp;&nbsp;Heap Sort
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given an unsorted array of integers, implement the Heap Sort algorithm 
+and return the array sorted.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;Heap Sort is an efficient, comparison-based sorting algorithm that uses a Binary Heap 
+to sort elements. A Binary Heap is an abstraction adhering to a conceptual set of rules, while the underlying data is 
+structured most typically as an array. A Binary Heap leverages an array to implicitly represent a Complete Binary Tree, 
+mapping parent-child relationships through simple index arithmetic rather than physical pointers. A Complete Binary Tree is a 
+Binary Tree that is completely filled in every level with the possible exception of the last level. The last level can be filled, 
+but it is not required. If there are elements in the last level of the tree, and the last level of the tree is not completely 
+filled, then the elements in the last level of the tree must be filled from left to right and there cannot be any gaps. 
+A key concept to understand is the Array to Tree mapping. So for any element in the heap at index $i$, its left child (if exists)
+is at index $2i + 1$, its right child (if exists) is at index $2i + 2$ and its parent (if exists) is at index 
+$\lfloor \frac{i-1}{2} \rfloor$. In this implementation, the first step that we will need to do is to turn our unsorted array 
+into a Max Heap. Max Heap is a special type of heap where the value of any given node in the heap is greater than or equal to 
+the values of its children (if any). To turn this unsorted array into a Max Heap, we need to implement a heapify function. 
+The heapify function rearrnges the elements of the array such that the properties of Max Heap are maintained: for every node, 
+it's value is greater than or equal to that of its children (if any). Since leaf nodes do not have children, we do not run the 
+heapify function on leaf nodes. We run the heapify function starting with the last non-leaf node and work our way backwards up 
+to the root. After the array has been turned into a Max Heap, the algorithm will perform Extract Max, which swaps the root with 
+the last element that has not already been extracted, putting the max after all of the elements that have not yet been extracted
+but before all of the elements that have already been extracted. We then perform heapify on the root, which sifts the root 
+down to its correct position in the Max Heap. Keep repeating this process for all elements that have not already been extracted 
+until there is only one element left in the Max Heap. Then after that the array is now sorted and can be returned.
+<br />
+This solution can be implemented recursively and iteratively.
+<br />
+I have implemented the recursive solution below:
+<br />
+```python showLineNumbers
+# Recursive Solution
+class Solution:
+    def max_heapify(self, arr: list[int], heap_size: int, current_index: int) -> None:
+        # The max_heapify function wants to determine which among [root, left child, right child] is the largest
+        # If the largest is root, we return
+        # If the largest is left child or right child, 
+        # we swap the largest value with the root's value and call max_heapify
+        # on the affected subtree (left or right)
+        largest_index = current_index
+        left_child_index = 2 * current_index + 1
+        right_child_index = 2 * current_index + 2
 
+        # Check if left child exists and is larger than largest so far
+        # If yes to both, then set largest index as left child index
+        if left_child_index < heap_size and arr[left_child_index] > arr[largest_index]:
+            largest_index = left_child_index
+
+        # Check if right child exists and is larger than largest so far
+        # If yes to both, then set largest index as right child index
+        if right_child_index < heap_size and arr[right_child_index] > arr[largest_index]:
+            largest_index = right_child_index
+
+        # If the largest is not the root, we swap root's value with the largest's value
+        # and recursively call max_heapify on the affected sub-tree (left or right).
+        # If the largest is the root, this is the base case, and so we return.
+        if largest_index != current_index:
+            # Swap the value of root with the value of largest among [left child, right child].
+            arr[current_index], arr[largest_index] = arr[largest_index], arr[current_index]
+
+            # Recursively call max_heapify on the affected subtree (left or right).
+            self.max_heapify(arr, heap_size, largest_index)
+
+
+    def heap_sort(self, arr: list[int]) -> list[int]:
+        heap_size = len(arr)
+
+        # Build Max Heap
+        # We heapify every node starting with the last non-leaf node and work our way backwards up to the root.
+        for i in range((heap_size - 2) // 2, -1, -1):
+            self.max_heapify(arr, heap_size, i)
+
+        # Extract Max
+        for i in range(heap_size - 1, 0, -1):
+            # Swap root with last element that has not already been extracted.
+            arr[0], arr[i] = arr[i], arr[0]
+
+            # Call heapify on the root, sifting it down to its correct position in the Max Heap.
+            self.max_heapify(arr, i, 0)
+
+        return arr
+```
+<br />
+$Time\;Complexity: O(nlog\;n)$
+<br />
+**Explanation:**
+<br />
+- **The time complexity** of this algorithm can be divided into two parts.
+- **Part 1 is Time Complexity to Build Max Heap:**
+- **To build a Max Heap,** the algorithm calls max_heapify on all non-leaf nodes to the root.
+- **The time required** to max_heapify a node depends on the height of the heap, because max_heapify
+sifts a node down from the root level by level to its correct position. So as the number of levels, or the
+height of the heap increases, the time resources required will also increase.
+- **Therefore,** a single max_heapify operation takes $O(h)$ time.
+- **Since a heap is a Complete Binary Tree,** at height $h$, or another way to think of it is at level $h$ in the Heap,
+the maximum number of nodes that can be at that level or height is: $\lceil \frac{n}{2^{h + 1}} \rceil$.
+- **Then we can say** that the total time to build a Max Heap is: 
+$$
+\sum_{h=1}^{\lfloor log\;n \rfloor} \frac{n}{2^{h + 1}}\;•\;O(h)
+$$
+(we begin the summation at $h = 1$ because we ignore the level with the leaf nodes)
+<br />
+- **We can factor out** $\frac{n}{2}$. Leading to:
+$$
+\frac{n}{2}\;•\;\sum_{h=1}^{\lfloor log\;n \rfloor} \frac{O(h)}{2^{h}}
+$$
+<br />
+- **By applying** big $O$ notation, terms like $\frac{1}{2}$ get absorbed and since big $O$ is an asymptotic upper bound,
+we can extend the summation to infinity, leading to:
+$$
+O(n\;•\;\sum_{h=1}^{\infty} \frac{h}{2^{h}})
+$$
+<br />
+- **Evaluating the geometric series,** we get:
+$$
+S = \sum_{h=1}^{\infty} \frac{h}{2^{h}} = \frac{1}{2^{1}} + \frac{2}{2^{2}} + \frac{3}{2^{3}} + \frac{4}{2^{4}} + ... 
+$$
+<br />
+- **We then multiply** the whole equation by $\frac{1}{2}$ to get:
+$$
+\frac{1}{2}\;•\;S = \frac{1}{2^{2}} + \frac{2}{2^{3}} + \frac{3}{2^{4}} + ... 
+$$
+<br />
+- **Subtracting** $S - \frac{1}{2}\;•\;S$ yields:
+$$
+S - \frac{1}{2}\;•\;S = \frac{1}{2^{1}} + (\frac{2}{2^{2}} - \frac{1}{2^{2}}) + (\frac{3}{2^{3}} - \frac{2}{2^{3}}) + (\frac{4}{2^{4}} - \frac{3}{2^{4}}) + ... 
+$$
+<br />
+- **This equation** simplifies to:
+$$
+\frac{1}{2}\;•\;S = \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \frac{1}{16} + ... 
+$$
+<br />
+- **The right side** of this equation is an infinite geometric series, where the first term $a$ is $\frac{1}{2}$
+and the common ratio $r$ is $\frac{1}{2}$. We can use this formula $\frac{a}{1 - r}$:
+$$
+\frac{1}{2}\;•\;S = \frac{\frac{1}{2}}{1 - \frac{1}{2}} = \frac{\frac{1}{2}}{\frac{1}{2}} = 1
+$$
+<br />
+- **Solving for** $S$ we get:
+$$
+S = 2
+$$
+<br />
+- **Plugging** S back into the big $O$ formula from before, we get:
+$$
+O(n\;•\;2) = O(n)
+$$
+<br />
+- **Therefore,** big $O$ time complexity for building the Max Heap is $O(n)$.
+<br />
+- **Phase 2 is Sorting the Elements**
+- **The time required** to max_heapify a node depends on the height of the heap, because max_heapify
+sifts a node down from the root level by level to its correct position. So as the number of levels, or the
+height of the heap increases, the time resources required will also increase.
+- **Therefore,** a single max_heapify operation takes $O(h) = O(log\;n)$ time.
+- **The loop to sort the elements** runs $n - 1$ times.
+- **Therefore,** the time required to sort the elements is $O((n - 1)\;•\;log\;n) = O(nlog\;n)$.
+<br />
+- **Putting the two phases together,** we get total time complexity: $O(n) + O(nlog\;n) = O(nlog\;n)$.
+- **Hence,** the big $O$ time complexity is $O(nlog\;n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **Stack Frame:** A new stack frame is created for each recursive call, and the total memory required is proportional 
+to the number of recursive calls.
+- **The number of active stack frames** is proportional to the height of the heap. Because the recursive function max_heapify 
+sifts a node down from the root, level by level, to its correct position. And on every level during the process,
+max_heapify makes a recursive call to itself. In the worst-case, a root node will be sifted down all the way to the bottom
+level as a leaf node.
+- **Therefore,** the worst-case maximum number of stack frames is $O(h) = O(log\;n)$.
+- **Hence,** the big $O$ space complexity is $O(log\;n)$.
+<br />
+Now that we have explained the recursive solution, we will now transition to the iterative solution. The iterative solution
+is almost the same as the recursive solution, but for the heapify function, instead of recursively calling itself with the
+index of the largest child, it will use a while loop instead and when $largest\_index != current\_index$ it will 
+swap the values of the arr at $current\_index$ and $largest\_index$ and set the $current\_index = largest\_index$.
+It will keep looping until the $largest\_index == current\_index$ at which point it will break out of the loop.
+<br />
+I have implemented the iterative solution below:
+<br />
+```python showLineNumbers
+# Iterative Solution
+class Solution:
+    def max_heapify(self, arr: list[int], heap_size: int, current_index: int) -> None:
+        # The max_heapify function wants to determine which among [root, left child, right child] is the largest
+        # If the largest is root, we return
+        # If the largest is left child or right child, 
+        # we swap the largest value with the root's value and call max_heapify
+        # on the affected subtree (left or right)
+        while True:
+            largest_index = current_index
+            left_child_index = 2 * current_index + 1
+            right_child_index = 2 * current_index + 2
+
+            # Check if left child exists and is larger than largest so far
+            # If yes to both, then set largest index as left child index
+            if left_child_index < heap_size and arr[left_child_index] > arr[largest_index]:
+                largest_index = left_child_index
+
+            # Check if right child exists and is larger than largest so far
+            # If yes to both, then set largest index as right child index
+            if right_child_index < heap_size and arr[right_child_index] > arr[largest_index]:
+                largest_index = right_child_index
+
+            # If the largest is not the root, we swap root's value with the largest's value
+            # and we set current_index equal to largest_index.
+            # If the largest is the root, we break out of the loop.
+            if largest_index != current_index:
+                # Swap the value of root with the value of largest among [left child, right child].
+                arr[current_index], arr[largest_index] = arr[largest_index], arr[current_index]
+                current_index = largest_index
+            else:
+                break
+
+
+    def heap_sort(self, arr: list[int]) -> list[int]:
+        heap_size = len(arr)
+
+        # Build Max Heap
+        # We heapify every node starting with the last non-leaf node and work our way backwards up to the root.
+        for i in range((heap_size - 2) // 2, -1, -1):
+            self.max_heapify(arr, heap_size, i)
+
+        # Extract Max
+        for i in range(heap_size - 1, 0, -1):
+            # Swap root with last element that has not already been extracted.
+            arr[0], arr[i] = arr[i], arr[0]
+
+            # Call heapify on the root, sifting it down to its correct position in the Max Heap.
+            self.max_heapify(arr, i, 0)
+
+        return arr
+```
+<br />
+$Time\;Complexity: O(nlog\;n)$
+<br />
+**Explanation:**
+<br />
+- **The time complexity** of this algorithm can be divided into two parts.
+- **Part 1 is Time Complexity to Build Max Heap:**
+- **To build a Max Heap,** the algorithm calls max_heapify on all non-leaf nodes to the root.
+- **The time required** to max_heapify a node depends on the height of the heap, because max_heapify
+sifts a node down from the root level by level to its correct position. So as the number of levels, or the
+height of the heap increases, the time resources required will also increase.
+- **Therefore,** a single max_heapify operation takes $O(h)$ time.
+- **Since a heap is a Complete Binary Tree,** at height $h$, or another way to think of it is at level $h$ in the Heap,
+the maximum number of nodes that can be at that level or height is: $\lceil \frac{n}{2^{h + 1}} \rceil$.
+- **Then we can say** that the total time to build a Max Heap is: 
+$$
+\sum_{h=1}^{\lfloor log\;n \rfloor} \frac{n}{2^{h + 1}}\;•\;O(h)
+$$
+(we begin the summation at $h = 1$ because we ignore the level with the leaf nodes)
+<br />
+- **We can factor out** $\frac{n}{2}$. Leading to:
+$$
+\frac{n}{2}\;•\;\sum_{h=1}^{\lfloor log\;n \rfloor} \frac{O(h)}{2^{h}}
+$$
+<br />
+- **By applying** big $O$ notation, terms like $\frac{1}{2}$ get absorbed and since big $O$ is an asymptotic upper bound,
+we can extend the summation to infinity, leading to:
+$$
+O(n\;•\;\sum_{h=1}^{\infty} \frac{h}{2^{h}})
+$$
+<br />
+- **Evaluating the geometric series,** we get:
+$$
+S = \sum_{h=1}^{\infty} \frac{h}{2^{h}} = \frac{1}{2^{1}} + \frac{2}{2^{2}} + \frac{3}{2^{3}} + \frac{4}{2^{4}} + ... 
+$$
+<br />
+- **We then multiply** the whole equation by $\frac{1}{2}$ to get:
+$$
+\frac{1}{2}\;•\;S = \frac{1}{2^{2}} + \frac{2}{2^{3}} + \frac{3}{2^{4}} + ... 
+$$
+<br />
+- **Subtracting** $S - \frac{1}{2}\;•\;S$ yields:
+$$
+S - \frac{1}{2}\;•\;S = \frac{1}{2^{1}} + (\frac{2}{2^{2}} - \frac{1}{2^{2}}) + (\frac{3}{2^{3}} - \frac{2}{2^{3}}) + (\frac{4}{2^{4}} - \frac{3}{2^{4}}) + ... 
+$$
+<br />
+- **This equation** simplifies to:
+$$
+\frac{1}{2}\;•\;S = \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \frac{1}{16} + ... 
+$$
+<br />
+- **The right side** of this equation is an infinite geometric series, where the first term $a$ is $\frac{1}{2}$
+and the common ratio $r$ is $\frac{1}{2}$. We can use this formula $\frac{a}{1 - r}$:
+$$
+\frac{1}{2}\;•\;S = \frac{\frac{1}{2}}{1 - \frac{1}{2}} = \frac{\frac{1}{2}}{\frac{1}{2}} = 1
+$$
+<br />
+- **Solving for** $S$ we get:
+$$
+S = 2
+$$
+<br />
+- **Plugging** S back into the big $O$ formula from before, we get:
+$$
+O(n\;•\;2) = O(n)
+$$
+<br />
+- **Therefore,** big $O$ time complexity for building the Max Heap is $O(n)$.
+<br />
+- **Phase 2 is Sorting the Elements**
+- **The time required** to max_heapify a node depends on the height of the heap, because max_heapify
+sifts a node down from the root level by level to its correct position. So as the number of levels, or the
+height of the heap increases, the time resources required will also increase.
+- **Therefore,** a single max_heapify operation takes $O(h) = O(log\;n)$ time.
+- **The loop to sort the elements** runs $n - 1$ times.
+- **Therefore,** the time required to sort the elements is $O((n - 1)\;•\;log\;n) = O(nlog\;n)$.
+<br />
+- **Putting the two phases together,** we get total time complexity: $O(n) + O(nlog\;n) = O(nlog\;n)$.
+- **Hence,** the big $O$ time complexity is $O(nlog\;n)$.
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** only needs to store a few integer variables resulting in constant auxiliary memory usage regardless of size
+of inputs. 
+- **Hence,** the big $O$ space complexity is: $O(1)$.
+<br />
+<BackToTopButton />
+<br />
 ## Graph Problems
 
 ## Dynamic Programming Problems
