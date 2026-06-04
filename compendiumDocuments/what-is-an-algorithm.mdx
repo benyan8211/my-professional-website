@@ -1153,6 +1153,79 @@ of inputs.
 <BackToTopButton />
 <br />
 ## Hash Table Problems
+<br />
+### ⚜️&nbsp;&nbsp;Top K Frequent Elements
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given an integer array $nums$ and an integer $k$, return the $k$ most frequent elements.
+You may return the answer in any order.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we use hash tables. First we will want to create a $num\_to\_count$
+hash table. We loop through $nums$ and for every number that we see, in $$num\_to\_count$$ we create a key for that number 
+and its value is the number of times that we see the number appear in $nums$. After that loop is complete, we create another 
+hash table called $group\_nums\_by\_count$ where for every count, we map it to an array of numbers that has that count. 
+Next, we will want to populate $group\_nums\_by\_count$ with values and so we loop through $num\_to\_count$ and for every count, 
+we append the corresponding number to the array that the count maps to in $group\_nums\_by\_count$. Then we loop in reverse order 
+from $len(nums)$ to $1$ and if $group\_nums\_by\_count$ has a key with that loop counter value, we add the numbers in the 
+corresponding array to the $top\_k\_frequent$ array. The reason why we loop in reverse order is because we want to access the 
+numbers with the highest count first, since the problem is looking for the $k$ most frequent elements, which are the $k$ 
+elements with the highest count. Once the length of the $top\_k\_frequent$ array equals $k$, we return $top\_k\_frequent$. 
+After the loop ends, if we have not returned then return $top\_k\_frequent$.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Solution:
+    def top_k_frequent_elements(self, nums: list[int], k: int) -> list[int]:
+        top_k_frequent = []
+        nums_to_count = {}
+        for num in nums:
+            if num not in nums_to_count:
+                nums_to_count[num] = 1
+            else:
+                nums_to_count[num] += 1
+        
+        group_nums_by_count = {}
+
+        for num, count in nums_to_count.items():
+            if count not in group_nums_by_count:
+                group_nums_by_count[count] = []
+                group_nums_by_count[count].append(num)
+            else:
+                group_nums_by_count[count].append(num)
+        
+        for count in range(len(nums), 0, -1):
+            if count in group_nums_by_count:
+                for num in group_nums_by_count[count]:
+                    top_k_frequent.append(num)
+                    if k == len(top_k_frequent):
+                        return top_k_frequent
+
+        return top_k_frequent
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** counts frequencies of each number which takes $O(n)$ time since it visits every number once.
+- **The algorithm** places elements into buckets based on frequencies of each number which also takes $O(n)$ time 
+since it visits every number to count mapping once.
+- **The algorithm** iterates backwards extracting the top k most frequent elements, which in the worst-case is $O(n)$
+time because if all elements are unique, they will all have count of $1$, which is the last loop counter value in the
+loop, and the loop will have iterated $n - 1$ times.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The two hash tables** used in the algorithm $num\_to\_count$ and $group\_nums\_by\_count$ store $O(n)$ elements in
+the worst case scenario where every number in $nums$ is unique. In $num\_to\_count$ every number in $nums$ will by a key,
+each mapping to $1$. In $group\_nums\_by\_count$ $1$ will map to an array containing all numbers in $nums$.
+- **Hence,** big $O$ space complexity is $O(n)$.
+<br />
+<BackToTopButton />
+<br />
 ## Stack Problems
 <br />
 ### ⚜️&nbsp;&nbsp;Valid Parentheses
