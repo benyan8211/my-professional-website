@@ -37,7 +37,7 @@ code[data-line-numbers] {
 }
 
 [data-rehype-pretty-code-figure] pre {
-  width: 1260px;
+  width: 1320px;
   max-width: 100%;
   overflow-x: auto;  
 }

@@ -1226,6 +1226,115 @@ each mapping to $1$. In $group\_nums\_by\_count$ $1$ will map to an array contai
 <br />
 <BackToTopButton />
 <br />
+### ⚜️&nbsp;&nbsp;Subarray Sum Equals K
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given an array of integers $nums$ and an integer $k$, return the total number of subarrays 
+whose sum equals to $k$. A subarray is a contiguous, non-empty sequence of elements within an array.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we must realize that we are only interested in the total number of 
+subarrays whose value sum up to $k$. The specific values of the subarrays are not relevant, so long as the sum equals $k$. 
+Therefore, we do not need to store any subarray values. Another point is, we want to examine every subarray of the array, but 
+we do not want to examine all of them one by one, because that will require looping through all of the subarrays that begin at 
+index $0$, followed by all of the subarrays that begin at index $1$, followed by all of the subarrays that begin at index $2$, 
+and so on. And doing so will result in a $O(n^2)$ time algorithm, which is not very efficient. We need a way to examine all of 
+the subarrays without actually iterating through to examine them. 
+<br />
+First we need a variable called $num\_subarrays\_equal\_k$, initially set to $0$, which will store the number of subarrays that 
+sum up to $k$. Next, what we can do is loop through $nums$ and examine only the subarrays begin at index $0$. Call each subarray 
+$subarray[0, b]$. To evaluate the sum of $subarray[0, b]$, we can use a variable $current\_sum\_of\_subarray$, initially set to 
+$0$, and add to it every element of $nums$ that we encounter in our loop. 
+<br />
+Next, we will want to examine if any of the subarrays of $subarray[0, b]$ sum up to $k$. So then, for every subarray that we 
+encounter, we need a data structure that will store sum of each subarray mapped to the number of subarrays that have that sum. 
+The reason why we structure it this way is because we only need the sum and the number of times we got that sum from a subarray, 
+not any of the subarray values themselves. For key/value mappings, the appropriate data structure is hash table. So for every 
+$subarray[0, b]$, we will store in the hash table: its sum mapped to the number of times that sum has occurred. So for a given 
+subarray $subarray[0, b]$, for its subarrays that begin at index $0$, we already know what their sum is, because we visited them 
+already in our loop and we have the sum to count mapping in our hash table. But what about its subarrays that begin at an index 
+greater than $0$? So for this we need to leverage a key insight. The key insight is that a main subarray can be broken up into 
+two parts: prefix and suffix. The prefix subarray begins at index $0$ and ends at an index smaller than the largest index of the 
+main subarray. The suffix subarray begins at the index after the prefix subarray ends at the end of the main subarray. 
+Mathematically, it can be expressed as:
+<br />
+$$
+subarray[0, b] = subarray[0, a] + subarray[a + 1, b]
+$$
+<br />
+In our example, $subarray[0, b]$ is the main subarray, $subarray[0, a]$ is the prefix subarray and $subarray[a + 1, b]$ is
+the suffix subarray. So we want to figure out if there exists any suffix subarrays $subarray[a + 1, b]$ that sum up to $k$. 
+To do this, we use some reverse logic. Suppose the sum of our $subarray[a + 1, b]$ equals $k$, then this means that if we take 
+the sum of $subarray[0, b]$ and subtract $k$ from it, we will get the sum of $subarray[0, a]$. 
+Since we have a hash table that stores prefix subarray sums, all we need to do is look in that hash table to see the count for
+that subarray sum. For each prefix subarray $subarray[0, a]$ that sums up to that value, there will be a 
+corresponding suffix subarray $subarray[a + 1, b]$ that sums up to $k$. Therefore, the number of prefix subarrays $subarray[0, a]$ 
+that sum up to the value equals to the number of suffix subarrays $subarray[a + 1, b]$ that sum up to $k$. We will want to add 
+this value to $num\_subarrays\_equal\_k$. Continue to iterate this loop until the end of $nums$, and return 
+$num\_subarrays\_equal\_k$.
+<br />
+There is one edge case that we must address. To solve for this edge case, we seed the hash table initially with $\{0:1\}$.
+This is to handle the scenario where the main subarray $subarray[0, b]$ sums up to $k$. If $subarray[0, b]$ 
+sums up to $k$ then:
+$$
+subarray[0, a] = k - k = 0
+$$
+<br />
+If we do not seed the hash table with $\{0:1\}$, then the value that $0$ maps to in the hash table will contain the number
+of all prefix subarrays up to that point that summed up to $0$, which equals the number of corresponding suffix subarrays that 
+sum up to $k$. However, it will not include $subarray[0, b]$. Therefore, it is very important to initially seed the hash table 
+with $\{0:1\}$.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Solution:
+    def subarray_sum_equals_k(self, nums: list[int], k: int) -> int:
+        # Keeps track of the number of subarray sums that equal k
+        num_subarrays_equal_k = 0
+
+        # Keeps track of the main subarray sum
+        current_sum_of_subarray = 0
+
+        # Hash Table mapping prefix subarray sums to the number of prefix subarrays that have that sum
+        prefix_subarray_sum_count = {0:1}
+
+        # Loop through nums
+        for num in nums:
+            # Update the sum of main subarray
+            current_sum_of_subarray += num
+
+            # Set suffix subarray sum value to k
+            suffix_subarray_sum = k
+
+            # Take main subarray sum and subtract suffix subarray sum from it. Set it as prefix subarray sum.
+            prefix_subarray_sum = current_sum_of_subarray - suffix_subarray_sum
+
+            # If there exists such a prefix subarray sum, get its count and add it to result
+            if prefix_subarray_sum in prefix_subarray_sum_count:
+                num_subarrays_equal_k += prefix_subarray_sum_count[prefix_subarray_sum]
+            
+            # Store main subarray sum in Hash Table
+            prefix_subarray_sum_count[current_sum_of_subarray] = prefix_subarray_sum_count.get(current_sum_of_subarray, 0) + 1
+        
+        return num_subarrays_equal_k
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** loops through every element in $nums$.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case,** every prefix sum is completely unique. 
+- **The hash table** will grow to store $n + 1$ distinct prefix sum entries (including the 0 : 1 baseline).
+- **Hence,** the big $O$ space complexity is $O(n)$.
+<br />
+<BackToTopButton />
+<br />
 ## Stack Problems
 <br />
 ### ⚜️&nbsp;&nbsp;Valid Parentheses
