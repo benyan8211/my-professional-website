@@ -15,7 +15,8 @@
           "scope": [
             "storage.type.class.python",
             "storage.type.function.python",
-            "keyword.control.flow.python"
+            "keyword.control.flow.python",
+            "keyword.control.import.python"
           ],
           "settings": {
             "foreground": "#FF6961" 
@@ -52,7 +53,11 @@
               "support.function.builtin.python",
               "constant.language.python",
               "punctuation.section.class.begin.python",
-              "punctuation.separator.period.python"
+              "punctuation.separator.period.python",
+              "punctuation.definition.list.begin.python",
+              "punctuation.definition.list.end.python",
+              "punctuation.parenthesis.begin.python",
+              "punctuation.parenthesis.end.python"
           ],
           "settings": {
               "foreground": "#DCDCDC" 

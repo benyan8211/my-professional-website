@@ -2400,6 +2400,97 @@ of inputs.
 <br />
 <BackToTopButton />
 <br />
+### ⚜️&nbsp;&nbsp;Find K Pairs with Smallest Sums
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;You are given two integer arrays $nums1$ and $nums2$ sorted in non-descreasing order and an
+integer $k$. 
+<br />
+Define a pair $(u, v)$ which consists of one element from the first array and one element from the second array.
+<br />
+Return the $k$ pairs $(u_1, v_1), (u_2, v_2), ..., (u_k, v_k)$ with the smallest sums.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;Since $nums1$ and $nums2$ are sorted, the absolute smallest sum is guaranteed to be the 
+sum of $nums1[0]$ and $nums2[0]$. Next we will either want to move the index of $nums1$ forward by 1 and keep the index of 
+$nums2$ the same or move the index of $num2$ forward by 1 and keep the index of $nums1$ the same. Instead of comparing the 
+possible candidates manually, we will use a min-heap to arrange the elements such that the $(u, v)$ pair with the smallest
+sum is at the top of the tree. Each node of the heap will contain 3 items: the sum of $(u, v)$, the index of $u$, and the index
+of $v$. By utilizing this approach, we may encounter a scenario where we view the same $(u, v)$ more than once, and so we 
+maintain a set to keep track of all $(u, v)$ that we have visited so far. Continue to push new candidates onto the heap
+and extract elements from the top of the heap until we have reached $k$ pairs, and then stop.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+import heapq
+
+class Solution:
+    def k_smallest_pairs(self, nums1: list[int], nums2: list[int], k: int) -> list[int]:
+        if not nums1 or not nums2 or k <= 0:
+            return []
+        
+        smallest_pairs = []
+        visited_pairs = set()
+        # Initialize the heap with the first (u, v) being (0, 0)
+        # Each heap element contains 3 items: the sum of u & v, the index of u, and the index of v.
+        min_heap = [[nums1[0] + nums2[0], 0, 0]]
+
+        # Loop while there are nodes in the heap and we have not yet reached k pairs
+        while min_heap and len(smallest_pairs) < k:
+            # Pop the top element from the heap
+            sum, idx_1, idx_2 = heapq.heappop(min_heap)
+            # Add the values nums1[idx_1] and nums2[idx_2] to the result
+            smallest_pairs.append([nums1[idx_1], nums2[idx_2]])
+
+            # Work on the potential candidate (idx_1 + 1, idx_2)
+            candidate_idx_1 = idx_1 + 1
+            candidate_idx_2 = idx_2
+            # Check to see if idx_1 + 1 is in bounds and that the pair (idx_1 + 1, idx_2)
+            # has not yet been visited. If so, add the pair to the heap and also add the pair to 
+            # the set of visited pairs.
+            if candidate_idx_1 < len(nums1) and (candidate_idx_1, candidate_idx_2) not in visited_pairs:
+                heapq.heappush(min_heap, [nums1[candidate_idx_1] + nums2[candidate_idx_2], candidate_idx_1, candidate_idx_2])
+                visited_pairs.add((candidate_idx_1, candidate_idx_2))
+
+            # Work on the potential candidate (idx_1, idx_2 + 1)
+            candidate_idx_1 = idx_1
+            candidate_idx_2 = idx_2 + 1
+            # Check to see if idx_2 + 1 is in bounds and that the pair (idx_1, idx_2 + 1)
+            # has not yet been visited. If so, add the pair to the heap and also add the pair to 
+            # the set of visited pairs.
+            if candidate_idx_2 < len(nums2) and (candidate_idx_1, candidate_idx_2) not in visited_pairs:
+                heapq.heappush(min_heap, [nums1[candidate_idx_1] + nums2[candidate_idx_2], candidate_idx_1, candidate_idx_2])
+                visited_pairs.add((candidate_idx_1, candidate_idx_2))
+        
+        return smallest_pairs
+```
+<br />
+$Time\;Complexity: O(klog\;k)$
+<br />
+**Explanation:**
+<br />
+- **The while loop** runs at most $k$ times because for every iteration of the while loop, the algorithm is adding a 
+new pair to the result.
+- **For every iteration** of the while loop, the algorithm is popping from the min-heap. And pushing two new candidates 
+onto the min-heap. 
+- **The size of the min-heap** is upper bounded by $O(k)$ since there are at most $k$ iterations and in
+each iteration there is a constant amount of nodes being added/removed.
+- **Therefore,** the time complexity of popping from the min heap and pushing two new candidates onto the min-heap 
+is upper bounded by $O(log\;k)$.
+- **In conclusion,** we have $k$ iterations and $O(log\;k)$ amount of work per iteration. Therefore, the big $O$ time
+complexity is $O(klog\;k)$.
+<br />
+$Space\;Complexity: O(k)$
+<br />
+**Explanation:**
+<br />
+- **The size of the min-heap** is upper bounded by $O(k)$ since there are at most $k$ iterations and in
+each iteration there is a constant amount of nodes being added/removed.
+- **The size of the set** used to track visited $(u, v)$ pairs is also upper bounded by $O(k)$ since we are 
+adding at most two pairs to the set per iteration for $k$ iterations.
+- **Therefore,** big $O$ space complexity is $O(k)$.
+<br />
+<BackToTopButton />
+<br />
 ## Graph Problems
 
 ## Dynamic Programming Problems
