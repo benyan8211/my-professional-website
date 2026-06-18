@@ -399,73 +399,6 @@ of inputs.
 <br />
 <BackToTopButton />
 <br />
-## String Problems
-<br />
-### ⚜️&nbsp;&nbsp; Valid Anagram
-<br />
-**<u>Problem:</u>**&nbsp;&nbsp;Given two strings $str1$ and $str2$, develop an efficient algorithm to determine if the two 
-strings are anagrams of each other. This means that the two strings are composed of the exact same characters with the 
-exact same frequencies, just potentially arranged in a different order. If the two strings are anagrams of each other,
-return $True$, otherwise return $False$.
-<br />
-**<u>Solution:</u>**&nbsp;&nbsp; To solve this problem, the first thing to do is to check if the lengths of $str1$ and $str2$
-are equal. If the lengths are not equal, we can immediately return $False$, because the strings cannot have the same
-frequency of characters if their lengths are different. Then we create an empty dictionary called $char\_count$. We then
-loop through $str1$ character by character and for every character, use $char\_count$ to keep track of the number of times
-each character appears in the string $str1$. Then after that loop has completed, we will loop through $str2$ character by
-character. If we encounter a character that is not in $char\_count$, we can immediately return $False$, because we know that
-$str2$ has a character that is not in $str1$ and so it cannot be an anagram of $str1$. For every character that is in 
-$char\_count$, we will subtract $1$ from the character's count in $char\_count$. And if the count for a 
-character becomes $0$, we delete that character from the dictionary $char\_count$. After this loop, if the two strings $str1$ 
-and $str2$ are valid anagrams, then the dictionary $char\_count$ should be empty in the end. If $char\_count$ is empty,
-return $True$; otherwise return $False$.
-<br />
-I have implemented the solution below:
-<br />
-```python showLineNumbers
-class Solution:
-    def valid_anagram(self, str1: str, str2: str) -> bool:
-        if len(str1) != len(str2):
-            return False
-        
-        char_count = {}
-
-        for character in str1:
-            char_count[character] = char_count.get(character, 0) + 1
-        
-        for character in str2:
-            if character not in char_count:
-                return False
-
-            char_count[character] -= 1
-
-            if char_count[character] == 0:
-                del char_count[character]
-
-        if len(char_count) == 0:
-            return True
-        else: 
-            return False
-```
-<br />
-$Time\;Complexity: O(n)$
-<br />
-**Explanation:**
-<br />
-- **In the worst-case,** the strings $str1$ and $str2$ have the same length, let us call the length $n$.
-- **The algorithm iterates** through each string twice.
-- **Hence,** big $O$ time complexity is $O(n)$.
-<br />
-$Space\;Complexity: O(1)$
-<br />
-**Explanation:**
-<br />
-- **There are 256** possible ASCII characters, so at most $char\_count$ can hold 256 key-value pairs, which is independent
-of the length of the strings $str1$ and $str2$.
-- **Hence,** big $O$ space complexity is $O(1)$.
-<br />
-<BackToTopButton />
-<br />
 ## Array Problems
 <br />
 ### ⚜️&nbsp;&nbsp;Binary Search
@@ -1153,6 +1086,71 @@ of inputs.
 <BackToTopButton />
 <br />
 ## Hash Table Problems
+<br />
+### ⚜️&nbsp;&nbsp;Valid Anagram
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given two strings $str1$ and $str2$, develop an efficient algorithm to determine if the two 
+strings are anagrams of each other. This means that the two strings are composed of the exact same characters with the 
+exact same frequencies, just potentially arranged in a different order. If the two strings are anagrams of each other,
+return $True$, otherwise return $False$.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp; To solve this problem, the first thing to do is to check if the lengths of $str1$ and $str2$
+are equal. If the lengths are not equal, we can immediately return $False$, because the strings cannot have the same
+frequency of characters if their lengths are different. Then we create an empty dictionary called $char\_count$. We then
+loop through $str1$ character by character and for every character, use $char\_count$ to keep track of the number of times
+each character appears in the string $str1$. Then after that loop has completed, we will loop through $str2$ character by
+character. If we encounter a character that is not in $char\_count$, we can immediately return $False$, because we know that
+$str2$ has a character that is not in $str1$ and so it cannot be an anagram of $str1$. For every character that is in 
+$char\_count$, we will subtract $1$ from the character's count in $char\_count$. And if the count for a 
+character becomes $0$, we delete that character from the dictionary $char\_count$. After this loop, if the two strings $str1$ 
+and $str2$ are valid anagrams, then the dictionary $char\_count$ should be empty in the end. If $char\_count$ is empty,
+return $True$; otherwise return $False$.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Solution:
+    def valid_anagram(self, str1: str, str2: str) -> bool:
+        if len(str1) != len(str2):
+            return False
+        
+        char_count = {}
+
+        for character in str1:
+            char_count[character] = char_count.get(character, 0) + 1
+        
+        for character in str2:
+            if character not in char_count:
+                return False
+
+            char_count[character] -= 1
+
+            if char_count[character] == 0:
+                del char_count[character]
+
+        if len(char_count) == 0:
+            return True
+        else: 
+            return False
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case,** the strings $str1$ and $str2$ have the same length, let us call the length $n$.
+- **The algorithm iterates** through each string twice.
+- **Hence,** big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **There are 256** possible ASCII characters, so at most $char\_count$ can hold 256 key-value pairs, which is independent
+of the length of the strings $str1$ and $str2$.
+- **Hence,** big $O$ space complexity is $O(1)$.
+<br />
+<BackToTopButton />
 <br />
 ### ⚜️&nbsp;&nbsp;Top K Frequent Elements
 <br />

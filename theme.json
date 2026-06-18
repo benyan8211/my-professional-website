@@ -57,7 +57,9 @@
               "punctuation.definition.list.begin.python",
               "punctuation.definition.list.end.python",
               "punctuation.parenthesis.begin.python",
-              "punctuation.parenthesis.end.python"
+              "punctuation.parenthesis.end.python",
+              "punctuation.definition.dict.begin.python",
+              "punctuation.definition.dict.end.python"
           ],
           "settings": {
               "foreground": "#DCDCDC" 
