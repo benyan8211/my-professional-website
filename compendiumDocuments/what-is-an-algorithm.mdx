@@ -2490,7 +2490,207 @@ adding at most two pairs to the set per iteration for $k$ iterations.
 <BackToTopButton />
 <br />
 ## Graph Problems
+<br />
+### ⚜️&nbsp;&nbsp;Number of Islands (BFS/DFS)
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given an $m\;x\;n$ 2D binary grid $grid$ which represents a map of $\text{``1''}$ for land and 
+$\text{``0''}$ for water, return the number of islands.
+<br />
+An **island** is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume
+that all four edges of the grid are surrounded by water.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;This problem can be solved using two different algorithms: breadth-first search (BFS) and 
+depth-first search (DFS).
+<br />
+**<u>BFS Solution:</u>**&nbsp;&nbsp;Breadth-First Search is a graph/tree traversal algorithm that explores nodes systematically 
+level by level, starting from a source node. The source node is the first node to be visited. Then the algorithm looks 
+at all of the source node's neighbors and visits **all** of them before proceeding. After **all** of the source node's neighbors
+have been visited, then for each of the source node's neighbors, we visit their neighbors. And only after **all** of the source
+node's neighbors' neighbors have been visited, do we progress to the next level and so on. The BFS Solution treats the $grid$
+in this problem as an undirected graph. The landmasses represented by $\text{``1''}$ are nodes and each node has an edge to
+each of its immediate neighbors (i.e. the $\text{``1''}$ values above, below, to the left, and to the right of it). The goal is 
+to find the number of connected components in the graph. We traverse through the grid. If we encounter a $\text{``0''}$, we 
+ignore it because it's water. But if we encounter a $\text{``1''}$ that means that we've hit upon an island. But we must 
+exhaustively perform BFS with that value as the source node because if that cell is connected to other land cells, then all of 
+those cells are part of the same island and should be counted as one island. To implement BFS, we use a queue data structure
+because it has a FIFO structure and we use it to store a node's neighbors that have yet to be explored. This FIFO structure is 
+advantageous because for a given node, we want to visit **all** of its neighbors first. And only after **all** of its neighbors 
+have been visited, only then will the algorithm visit one of the node's neighbors' neighbors and repeat the process. Using a FIFO 
+principle allows the oldest elements of the queue to be served first. And so the algorithm will dequeue and process all nodes at 
+one level before proceeding to the next level. If the algorithm encountered a piece of land during BFS, we do not want our 
+algorithm to count that land again during the main function. Instead of maintaining a set of visited nodes, for every 
+$\text{``1''}$ that we encouter, we will flip it to a $\text{``0''}$. The algorithm proceeds with its traversal until it has 
+traversed the entire grid, after which it stops. 
+<br /> 
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+import collections
 
+class Solution:
+    def bfs(self, source_node: (int, int), grid: list[list[str]]):
+        # Create a queue for unexplored nodes and add the source node to it
+        unexplored_nodes_queue = collections.deque([source_node])
+
+        # Flip the source node from "1" to "0" to signify that it will be visited
+        grid[source_node[0]][source_node[1]] = "0"
+
+        # Loop while there are still nodes left to explore
+        while unexplored_nodes_queue:
+            # Dequeue the current node from the queue 
+            current_node = unexplored_nodes_queue.popleft()
+
+            # Assemble all of the current node's neighbors 
+            neighbors = [(current_node[0] - 1, current_node[1]), 
+                (current_node[0] + 1, current_node[1]), (current_node[0], current_node[1] - 1), 
+                (current_node[0], current_node[1] + 1)]
+
+            # Loop through all of the current node's neighbors 
+            for neighbor in neighbors:
+                # Check if the current neighbor is in bounds and if it is a "1"
+                if (0 <= neighbor[0] < len(grid) and 
+                    0 <= neighbor[1] < len(grid[0]) and 
+                    grid[neighbor[0]][neighbor[1]] == "1"):
+                    # Flip the neighbor node from "1" to "0" to signify that it will be visited
+                    grid[neighbor[0]][neighbor[1]] = "0"
+                    # Enqueue the neighbor node into the queue
+                    unexplored_nodes_queue.append(neighbor)
+    def number_of_islands(self, grid: list[list[str]]) -> int:
+        # If grid is null or is empty, return 0 
+        if not grid:
+            return 0
+        
+        # Gather number of rows and columns for the upcoming nested for loop
+        rows = len(grid)
+        columns = len(grid[0])
+
+        # Variable holds the number of islands 
+        island_count = 0
+
+        # Traverse through the entire grid
+        for row in range(rows):
+            for column in range(columns):
+                # If algorithm encounters a piece of land and calls bfs on it
+                # and increment the island count.
+                if grid[row][column] == "1":
+                    self.bfs((row, column), grid)
+                    island_count += 1
+
+        return island_count
+```
+<br />
+$Time\;Complexity: O(m\;•\;n)$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case scenario,** the grid contains all $\text{``1''}$.
+- **BFS Traversal** will visit every node in the $m\;x\;n$ sized grid. Causing $O(m\;•\;n)$ amount of work.
+- **Then,** the algorithm will still have to traverse through the $m\;x\;n$ nested for loop, but never executing
+the if statement, because all nodes have been visited. Causing $O(m\;•\;n)$ amount of work.
+- **Therefore,** the big $O$ time complexity is $O(m\;•\;n)$.
+<br />
+$Space\;Complexity: O(min(m, n))$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case scenario,** the grid contains all $\text{``1''}$.
+- **BFS processes nodes** in a level by level fashion.
+- **At the peak level,** the number of nodes in that level is bounded by the smaller of the two dimensions.
+- **Hence,** the big $O$ space complexity is $O(min(m, n))$.
+<br />
+**<u>DFS Solution:</u>**&nbsp;&nbsp;Depth-First Search is a graph/tree traversal algorithm that starts at a designated starting node 
+and explores as deep as possible along a branch before backtracking. The algorithm begins by visiting the starting node. 
+Pick only one of the starting nodes neighbors and visit it. After that, pick only one of the starting node's neighbor's 
+neighbors and visit it. Keep repeating until the algorithm reaches a node with no neighbors. Then the algorithm 
+backtracks to the previous node and checks one of its unvisited neighbors. Keep repeating until every reachable node has 
+been visited. The DFS Solution treats the $grid$ in this problem as an undirected graph. The landmasses represented by 
+$\text{``1''}$ are nodes and each node has an edge to each of its immediate neighbors (i.e. the $\text{``1''}$ values above, 
+below, to the left, and to the right of it). The goal is to find the number of connected components in the graph. We traverse 
+through the grid. If we encounter a $\text{``0''}$, we ignore it because it's water. But if we encounter a $\text{``1''}$ that 
+means that we've hit upon an island and we will call DFS on it. We start with the first node, visit it, and then move onto one 
+of its neighbors. Then we visit that neighbor, and then we pick a neighbor of it and visit that and so on. We continue until we 
+reach a node with no neighbors, at which point, we backtrack to visit other neighbors of previously visited nodes. To implement 
+DFS, we use a stack data structure because it has a LIFO structure. This is advantageous because as soon as we push a node onto 
+the stack, we want to visit it right away, find one of its neighbors, push it onto the stack, and then visit it right away. The 
+LIFO principle allows us to pop the most recently added element. If the algorithm encountered a piece of land during DFS, we do 
+not want our algorithm to count that land again during the main function. Instead of maintaining a set of visited nodes, for every 
+$\text{``1''}$ that we encouter, we will flip it to a $\text{``0''}$. The algorithm proceeds with its traversal until it has 
+traversed the entire grid, after which it stops. 
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Solution:
+    def dfs(self, starting_node: (int, int), grid: list[list[str]]):
+        # Create a stack for unexplored nodes and add the starting node to it
+        unexplored_nodes_stack = [starting_node]
+
+        # Flip the starting node from "1" to "0" to signify that it will be visited
+        grid[starting_node[0]][starting_node[1]] = "0"
+
+        # Loop while there are still nodes left to explore
+        while unexplored_nodes_stack:
+            # Pop the current node from the stack 
+            current_node = unexplored_nodes_stack.pop()
+
+            # Assemble all of the current node's neighbors 
+            neighbors = [(current_node[0] - 1, current_node[1]), 
+                (current_node[0] + 1, current_node[1]), (current_node[0], current_node[1] - 1), 
+                (current_node[0], current_node[1] + 1)]
+
+            # Loop through all of the current node's neighbors 
+            for neighbor in neighbors:
+                # Check if the current neighbor is in bounds and if it is a "1".
+                if (0 <= neighbor[0] < len(grid) and 
+                    0 <= neighbor[1] < len(grid[0]) and 
+                    grid[neighbor[0]][neighbor[1]] == "1"):
+                    # Flip the neighbor node from "1" to "0" to signify that it will be visited
+                    grid[neighbor[0]][neighbor[1]] = "0"
+                    # Push the neighbor node onto the stack
+                    unexplored_nodes_stack.append(neighbor)
+    def number_of_islands(self, grid: list[list[str]]) -> int:
+        # If grid is null or is empty, return 0 
+        if not grid:
+            return 0
+        
+        # Gather number of rows and columns for the upcoming nested for loop
+        rows = len(grid)
+        columns = len(grid[0])
+
+        # Variable holds the number of islands 
+        island_count = 0
+
+        # Traverse through the entire grid
+        for row in range(rows):
+            for column in range(columns):
+                # If algorithm encounters a piece of land, call dfs and increment the island count.
+                if grid[row][column] == "1":
+                    self.dfs((row, column), grid)
+                    island_count += 1
+
+        return island_count
+```
+<br />
+$Time\;Complexity: O(m\;•\;n)$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case scenario,** the grid contains all $\text{``1''}$.
+- **DFS Traversal** will visit every node in the $m\;x\;n$ sized grid. Causing $O(m\;•\;n)$ amount of work.
+- **Then,** the algorithm will still have to traverse through the $m\;x\;n$ nested for loop, but never executing
+the if statement, because all nodes have been visited. Causing $O(m\;•\;n)$ amount of work.
+- **Therefore,** the big $O$ time complexity is $O(m\;•\;n)$.
+<br />
+$Space\;Complexity: O(m\;•\;n)$
+<br />
+**Explanation:**
+<br />
+- **In the worst-case scenario,** the grid contains all $\text{``1''}$.
+- **DFS Traversal** will visit every node in the $m\;x\;n$ sized grid before it pops from the stack.
+- **Hence,** the big $O$ space complexity is $O(m\;•\;n)$.
+<br />
+<BackToTopButton />
+<br />
 ## Dynamic Programming Problems
 <br />
 ### ⚜️&nbsp;&nbsp;Find all Prime numbers less than or equal to n (Sieve of Eratosthenes)
