@@ -399,6 +399,46 @@ of inputs.
 <br />
 <BackToTopButton />
 <br />
+### ⚜️&nbsp;&nbsp;Count set bits
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp; Given an integer $n$, return the number of set bits of that number.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;To solve this problem, we use Brian Kernighan's algorithm. The entire algorithm
+relies on a single bitwise trick. If you take a number $n$ and subtract $1$ from it, yielding $n - 1$, and then perform a 
+bitwise AND on those two numbers $n\&(n - 1)$, the result will unset the right-most set bit of $n$. So therefore, we can 
+loop while $n > 0$ and keep repeating this operation and use a counter to keep track of the number of times the operation
+has run and this will be the number of set bits. Then after the loop, return the counter.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class Solution:
+    def count_set_bits(self, n: int) -> int:
+        count = 0
+        while n > 0:
+            n &= (n - 1)
+            count += 1
+        
+        return count
+```
+<br />
+$Time\;Complexity: O(k)$
+<br />
+**Explanation:**
+<br />
+- **The while loop** keeps running while $n$ has at least one set bit.
+- **Therefore,** there will be $k$ iterations of the while loop, where $k$ is the number of set bits.
+- **Hence,** the big $O$ time complexity is $O(k)$.
+<br />
+$Space\;Complexity: O(1)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** only utilizes a counter variable. 
+- **Hence,** big $O$ space complexity is $O(1)$
+<br />
+<BackToTopButton />
+<br />
 ## Array Problems
 <br />
 ### ⚜️&nbsp;&nbsp;Binary Search
