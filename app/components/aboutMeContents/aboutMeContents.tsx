@@ -56,9 +56,9 @@ const AboutMeContents = () => {
             <div className={styles.aboutMeText}>
                 <div>I am a software developer with 7+ years of experience. I have worked in full-stack development positions across 3 companies, building RESTful API services using Spring Boot and NodeJS connected to MongoDB and DynamoDB databases and front end web interfaces using React and Next. I built this website using Next Typescript and hosted it on AWS using AWS Amplify.</div>
                 <br />
-                <div>Check out the <Link className="text-white-500 hover:text-gray-500" href="/compendium"><em className={styles.tabText}>Compendium</em></Link> tab for educational articles I've put together.</div>
-                <div>Check out the <Link className="text-white-500 hover:text-gray-500" href="/projects"><em className={styles.tabText}>Projects</em></Link> tab to interact with live demos of my projects.</div>
-                <div>Check out the <Link className="text-white-500 hover:text-gray-500" href="/connect"><em className={styles.tabText}>Connect</em></Link> tab to:</div>
+                <div>Check out the <Link className="text-white-500 hover:text-gray-500" href="/compendium"><strong className={styles.tabText}>Compendium</strong></Link> tab for educational articles I've put together.</div>
+                <div>Check out the <Link className="text-white-500 hover:text-gray-500" href="/projects"><strong className={styles.tabText}>Projects</strong></Link> tab to interact with live demos of my projects.</div>
+                <div>Check out the <Link className="text-white-500 hover:text-gray-500" href="/connect"><strong className={styles.tabText}>Connect</strong></Link> tab to:</div>
                 <ul className="list-disc pl-10">
                     <li>view the source code of my projects on GitHub</li>
                     <li>add me on LinkedIn</li>
