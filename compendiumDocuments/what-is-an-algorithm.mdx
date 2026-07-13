@@ -2110,6 +2110,61 @@ them until it reaches the leaf node.
 <br />
 <BackToTopButton />
 <br />
+### ⚜️&nbsp;&nbsp;Invert Binary Tree
+<br />
+**<u>Problem:</u>**&nbsp;&nbsp;Given the $root$ of a binary tree, invert the tree, and return its root.
+<br />
+**<u>Solution:</u>**&nbsp;&nbsp;We will perform a preorder traversal of the binary tree by first visiting the root,
+and then the left sub-tree, and finally the right sub-tree. When the algorithm visits a node, swap its left and right children.
+Keep repeating until the preorder traversal is complete.
+<br />
+I have implemented the solution below:
+<br />
+```python showLineNumbers
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Solution:
+    def invert_binary_tree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return None
+        
+        stack = [root]
+
+        while stack:
+            current_node = stack.pop()
+
+            current_node.left, current_node.right = current_node.right, current_node.left
+
+            if current_node.right:
+                stack.append(current_node.right)
+            
+            if current_node.left:
+                stack.append(current_node.left)
+        
+        return root
+```
+<br />
+$Time\;Complexity: O(n)$
+<br />
+**Explanation:**
+<br />
+- **The algorithm** visits and processes every node exactly once.
+- **Therefore,** the big $O$ time complexity is $O(n)$.
+<br />
+$Space\;Complexity: O(h)$
+<br />
+**Explanation:**
+<br />
+- **In every iteration of the loop,** the algorithm pops one node from the stack and pushes two onto the stack.
+This allows the stack to grow in proportion to the height of the tree.
+- **Hence,** big $O$ space complexity is $O(h)$.
+<br />
+<BackToTopButton />
+<br />
 ## Heap Problems
 <br />
 ### ⚜️&nbsp;&nbsp;Heap Sort
