@@ -1279,7 +1279,7 @@ subarray $subarray[0, b]$, for its subarrays that begin at index $0$, we already
 already in our loop and we have the sum to count mapping in our hash table. But what about its subarrays that begin at an index 
 greater than $0$? So for this we need to leverage a key insight. The key insight is that a main subarray can be broken up into 
 two parts: prefix and suffix. The prefix subarray begins at index $0$ and ends at an index smaller than the largest index of the 
-main subarray. The suffix subarray begins at the index after the prefix subarray ends at the end of the main subarray. 
+main subarray. The suffix subarray begins at the index after the prefix subarray ends and ends at the end of the main subarray. 
 Mathematically, it can be expressed as:
 <br />
 $$
@@ -1412,7 +1412,10 @@ class Solution:
 
         for parenthesis in parentheses_string:
             if parenthesis in parentheses_mapping:
-                if stack.pop() != parentheses_mapping[parenthesis]:
+                if stack.is_empty():
+                    return False
+                popped_value = stack.pop()
+                if popped_value != parentheses_mapping[parenthesis]:
                     return False
             else:
                 stack.push(parenthesis)
