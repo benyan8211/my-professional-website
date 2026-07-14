@@ -1028,7 +1028,7 @@ class ListNode:
 
 class Solution:
     def reverse_linked_list(self, head: ListNode) -> ListNode:
-        if not head or not head.next:
+        if not head.next:
             return head
         
         new_head = self.reverse_linked_list(head.next)
