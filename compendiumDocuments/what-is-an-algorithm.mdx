@@ -689,19 +689,21 @@ class Solution:
         size_of_subarray = 1
 
         while size_of_subarray < len(arr):
-            for i in range(0, len(arr), 2 * size_of_subarray):
+            for i in range(0, len(arr) - 1, 2 * size_of_subarray):
                 # Left subarray [i to middle_index - 1]. Right subarray [middle_index to right].
                 left_index = i 
                 middle_index = i + size_of_subarray
                 right_index = middle_index + size_of_subarray
 
-                # Clamp down value of right
+                # Clamp down value of middle index
+                if middle_index > len(arr):
+                    middle_index = len(arr) - 1
+
+                # Clamp down value of right index
                 if right_index > len(arr):
                     right_index = len(arr)
 
-                # Merge subarrays only if second subarray exists
-                if middle_index < len(arr):
-                    self.merge(arr, left_index, middle_index, right_index)
+                self.merge(arr, left_index, middle_index, right_index)
             
             size_of_subarray *= 2
 
@@ -767,47 +769,54 @@ I have implemented the recursive solution below:
 # Recursive Solution
 class Solution:
     def partition(self, arr: list[int], low: int, high: int) -> int:
-        # The pivot is set as the last element of the partition.
-        pivot = arr[high]
+        # Intialize pivot and left and right pointers
+        pivot = arr[low]
+        left_pointer = low + 1
+        right_pointer = high
 
-        # Initial highest index of left partition.
-        highest_index_left_partition = low - 1
+        # Loop while True
+        while True:
+            # Loop while left pointer value is in correct place
+            while left_pointer <= right_pointer and arr[left_pointer] <= pivot:
+                left_pointer += 1
 
-        # Loop through partition and position elements <= pivot in left partition.
-        for partition_iterator in range(low, high):
-            if arr[partition_iterator] <= pivot:
-                # Increment highest index of left partition.
-                highest_index_left_partition += 1
-                # Swap elements.
-                previous_highest_element_left_partition = arr[highest_index_left_partition]
-                arr[highest_index_left_partition] = arr[partition_iterator]
-                arr[partition_iterator] = previous_highest_element_left_partition
+            # Loop while right pointer value is in correct place
+            while left_pointer <= right_pointer and arr[right_pointer] >= pivot:
+                right_pointer -= 1
 
-        # Position pivot such that it is the next element after left partition.
-        pivot_index = highest_index_left_partition + 1
-        pivot_index_old_value = arr[pivot_index]
-        arr[pivot_index] = arr[high]
-        arr[high] = pivot_index_old_value
+            # If left and right pointers cross over, break out of the loop
+            if left_pointer > right_pointer:
+                break
 
-        return pivot_index
+            # Swap out of place values
+            arr[left_pointer], arr[right_pointer] = arr[right_pointer], arr[left_pointer]
+            left_pointer += 1
+            right_pointer -= 1
+        
+        # Move pivot to correct place
+        arr[low], arr[right_pointer] = arr[right_pointer], arr[low]
+
+        # Return pivot index
+        return right_pointer
 
     def quicksort_helper(self, arr: list[int], low: int, high: int) -> None:
-        # The Base Case: If low == high there is only 1 element in the partition, 
-        # if low > high, there are 0 elements in the partition, so return.
-        if low == high or low > high:
+        # If low and high cross over, return
+        if low > high:
             return
-
-        # Place pivot in correct position with smaller elements in left partition
-        # and greater elements in right partition.
+        
+        # Call partition to partition array and get pivot index
         pivot_index = self.partition(arr, low, high)
 
-        # Recursively call quicksort_helper on left and right partitions
-        self.quicksort_helper(arr, low, pivot_index - 1)
+        # Recursively call Quicksort Helper to partition left and right subarrays
         self.quicksort_helper(arr, pivot_index + 1, high)
+        self.quicksort_helper(arr, low, pivot_index - 1)
 
     def quicksort(self, arr: list[int]) -> list[int]:
+        # Intialize low and high
         low = 0
         high = len(arr) - 1
+
+        # Call Quicksort Helper
         self.quicksort_helper(arr, low, high)
         return arr
 ```
@@ -879,80 +888,59 @@ I have implemented the iterative solution below:
 <br />
 ```python showLineNumbers
 # Iterative Solution
-class Stack:
-    def __init__(self):
-        self._items = []
-
-    def is_empty(self):
-        return len(self._items) == 0
-
-    def size(self):
-        return len(self._items)
-
-    def push(self, item: str) -> None:
-        self._items.append(item)
-    
-    def pop(self) -> str:
-        if self.is_empty():
-            return None
-        else:
-            return self._items.pop()
-
 class Solution:
     def partition(self, arr: list[int], low: int, high: int) -> int:
-        # The pivot is set as the last element of the partition.
-        pivot = arr[high]
+        # Initialize pivot and left and right pointers
+        pivot = arr[low]
+        left_pointer = low + 1
+        right_pointer = high
 
-        # Initial highest index of left partition.
-        highest_index_left_partition = low - 1
+        while True:
+            # Loop while left pointer value is in correct place
+            while left_pointer <= right_pointer and arr[left_pointer] <= pivot:
+                left_pointer += 1
 
-        # Loop through partition and position elements <= pivot in left partition.
-        for partition_iterator in range(low, high):
-            if arr[partition_iterator] <= pivot:
-                # Increment highest index of left partition.
-                highest_index_left_partition += 1
-                # Swap elements.
-                previous_highest_element_left_partition = arr[highest_index_left_partition]
-                arr[highest_index_left_partition] = arr[partition_iterator]
-                arr[partition_iterator] = previous_highest_element_left_partition
+            # Loop while right pointer value is in correct place
+            while left_pointer <= right_pointer and arr[right_pointer] >= pivot:
+                right_pointer -= 1
 
-        # Position pivot such that it is the next element after left partition.
-        pivot_index = highest_index_left_partition + 1
-        pivot_index_old_value = arr[pivot_index]
-        arr[pivot_index] = arr[high]
-        arr[high] = pivot_index_old_value
+            # If pointers cross, break out of loop
+            if left_pointer > right_pointer:
+                break
 
-        return pivot_index
+            # Swap out of place elements
+            arr[left_pointer], arr[right_pointer] = arr[right_pointer], arr[left_pointer]
+
+            # After swap, progress the pointers
+            left_pointer += 1
+            right_pointer -= 1
+
+        # Move pivot to the correct spot
+        arr[low], arr[right_pointer] = arr[right_pointer], arr[low]
+
+        # Return pivot index
+        return right_pointer
 
     def quicksort(self, arr: list[int]) -> list[int]:
-        # stack holds tuples containing indices for partition boundaries
-        stack = Stack()
+        # Intialize the stack
+        stack = []
 
-        # low represents lower bound of partition.
-        # high represents upper bound of partition. 
-        low = 0
-        high = len(arr) - 1
+        # Push intial boundaries onto the stack
+        stack.append((0, len(arr) - 1))
 
-        # Push initial partition boundary onto stack
-        stack.push((low, high))
-        
-        # While there are still partitions that need to be processed
-        while not stack.is_empty():
-            # Retrieve new partition bound values
+        # Loop while stack is not empty
+        while len(stack) > 0:
+            # Pop from the stack
             low, high = stack.pop()
 
-            # If low < high, this means this partition is of size > 1
-            # and so it needs to be processed
             if low < high:
-                # Place pivot in correct position with smaller elements in left partition
-                # and greater elements in right partition.
+                # Partition
                 pivot_index = self.partition(arr, low, high)
 
-                # Push partition boundaries of left partition onto the stack
-                stack.push((low, pivot_index - 1))
-                # Push partition boundaries of right partition onto the stack
-                stack.push((pivot_index + 1, high))
-        
+                # Push next set of boundaries onto the stack
+                stack.append((pivot_index + 1, high))
+                stack.append((low, pivot_index - 1))
+
         return arr
 ```
 <br />
