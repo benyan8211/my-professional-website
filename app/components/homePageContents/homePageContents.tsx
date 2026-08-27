@@ -7,7 +7,7 @@ import styles from "./homePageContents.module.css";
 const HomePageContents = () => {
     return (
         <>
-            <div className="flex justify-center mt-28">
+            <div className="flex justify-center mt-28 ml-3">
                 <div className="relative w-82 h-82 overflow-hidden rounded-full">
                     <Image
                         src={myProfessionalPicture}
