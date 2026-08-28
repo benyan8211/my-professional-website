@@ -13,7 +13,7 @@ const ProjectsContents = () => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto p-6 ml-85">
             <Card
-                className="max-w-sm cursor-pointer border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-shadow duration-300 ease-out hover:shadow-[0_0_18px_rgba(255,255,255,0.95)]"
+                className="border-none max-w-sm cursor-pointer rounded-lg bg-white dark:bg-gray-800 transition-all duration-300 ease-out shadow-[inset_0_0_0_1px_#e5e7eb] dark:shadow-[inset_0_0_0_1px_#374151] hover:shadow-[inset_0_0_0_1px_#fff,0_0_12px_rgba(255,255,255,1),0_0_30px_rgba(255,255,255,0.6)]"
                 imgAlt="Meaningful alt text for an image that is not purely decorative"
                 imgSrc={salesEmailScribeLogo.src}
                 onClick={() => handleNavigation("https://sales-email-scribe.onrender.com")}

@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link';
 import awsLogo from "../../assets/aws_logo.jpeg";
+import adobeAcrobatLogo from "../../assets/adobe_acrobat_logo.png";
 import nodejsLogo from "../../assets/nodejs_logo.png";
 import githubLogo from "../../assets/github_logo.jpg";
 import nextjsLogo from "../../assets/nextjs_logo.png";
@@ -10,8 +11,20 @@ import openaiLogo from "../../assets/openai_agents_sdk_logo.png";
 import postgresqlLogo from "../../assets/postgresql_logo.png";
 import pythonDjangoLogo from "../../assets/python_django_logo.png";
 import styles from "./aboutMeContents.module.css";
+import { Button } from "flowbite-react";
+import { saveAs } from 'file-saver'
 
 const AboutMeContents = () => {
+    const handleDownload = async () => {
+        try {
+          const response = await fetch('/documents/Benjamin_Yan_Resume.pdf');
+          const blob = await response.blob();
+          saveAs(blob, 'Benjamin_Yan_Resume.pdf');
+        } catch (error) {
+          console.error('Download failed:', error);
+        }
+    };
+
     return (
         <>
             <div className="flex justify-center mt-15">
@@ -99,6 +112,24 @@ const AboutMeContents = () => {
                     <li>add me on LinkedIn</li>
                     <li>send me an email</li>
                 </ul>
+            </div>
+            <div>
+                <div className={styles.resumeText}>For a detailed look at my professional history and technical skills:</div>
+                <Button 
+                    color="dark"
+                    className="whitespace-nowrap justify-self-center mb-10 cursor-pointer w-50 h-18 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 ease-out hover:border-white dark:hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,1),0_0_30px_rgba(255,255,255,0.6)]"
+                    onClick={handleDownload}
+                >
+                    <Image
+                        src={adobeAcrobatLogo}
+                        width={30}
+                        height={30}
+                        alt="adobe acrobat logo"
+                        className="object-cover"
+                        priority
+                    />
+                    <span className="align-middle text-sm ml-3">Download Resume</span>
+                </Button>
             </div>
         </>
     );

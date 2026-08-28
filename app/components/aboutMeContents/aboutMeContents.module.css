@@ -15,3 +15,14 @@
     margin-left: 5px;
     margin-right: 5px;
 }
+
+.resumeText {
+    font-family: 'Google Sans Flex';
+    align-self: center;
+    font-size: 18px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    white-space: nowrap;
+    max-width: 57%;
+    justify-self: center;
+}
