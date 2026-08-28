@@ -1,4 +1,4 @@
-This is Benjamin Yan's professional website built using [Next.js](https://nextjs.org) and hosted in [Amazon Web Services](https://aws.amazon.com/).
+This is Benjamin Yan's professional website built using [Next.js (Typescript)](https://nextjs.org) and hosted in [Amazon Web Services](https://aws.amazon.com/).
 
 ## Overview
 
