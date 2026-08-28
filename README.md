@@ -4,7 +4,7 @@ This is Benjamin Yan's professional website built using [Next.js (Typescript)](h
 
 In this website, you can:
 
-- learn more about Benjamin Yan
+- learn more about him
 - read educational articles that he has written
 - try out some of his cool projects
 - connect with him through various channels
