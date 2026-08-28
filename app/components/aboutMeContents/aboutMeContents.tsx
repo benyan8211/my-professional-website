@@ -114,7 +114,7 @@ const AboutMeContents = () => {
                 </ul>
             </div>
             <div>
-                <div className={styles.resumeText}>For a detailed look at my professional history and technical skills:</div>
+                <div className={styles.resumeText}>For a detailed look at my professional history and technical expertise:</div>
                 <Button 
                     color="dark"
                     className="!ring-0 whitespace-nowrap justify-self-center mb-10 cursor-pointer w-50 h-18 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 ease-out hover:border-white dark:hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,1),0_0_30px_rgba(255,255,255,0.6)]"
