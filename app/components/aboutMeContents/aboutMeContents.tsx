@@ -75,7 +75,7 @@ const AboutMeContents = () => {
                         src={pythonDjangoLogo}
                         width={250}
                         height={250}
-                        alt="Picture of aws logo"
+                        alt="Picture of python/django logo"
                         className="object-cover"
                         priority
                     />
@@ -85,7 +85,7 @@ const AboutMeContents = () => {
                         src={postgresqlLogo}
                         width={250}
                         height={250}
-                        alt="Picture of aws logo"
+                        alt="Picture of postgresql logo"
                         className="object-cover"
                         priority
                     />
@@ -95,7 +95,7 @@ const AboutMeContents = () => {
                         src={openaiLogo}
                         width={250}
                         height={250}
-                        alt="Picture of aws logo"
+                        alt="Picture of openai logo"
                         className="object-cover"
                         priority
                     />
