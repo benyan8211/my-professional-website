@@ -102,7 +102,7 @@ const AboutMeContents = () => {
                 </div>
             </div>
             <div className={styles.aboutMeText}>
-                <div>I am a software developer with 7+ years of experience. I have worked in full-stack web development positions across 3 companies, building enterprise grade RESTful API services and polished front end web interfaces. I built this website using Next.js (Typescript) and hosted it on AWS Amplify. I also build Agentic AI projects in my free time.</div>
+                <div>I am a software developer with 7+ years of experience. I have worked in full-stack web development positions for 3 companies, building enterprise grade RESTful API services and polished front end web interfaces. I built this website using Next.js (Typescript) and hosted it on AWS Amplify. I also build Agentic AI projects in my free time.</div>
                 <br />
                 <div>Check out the <Link className="text-white-500 hover:text-gray-500" href="/compendium"><strong className={styles.tabText}>Compendium</strong></Link> tab for educational articles I've put together.</div>
                 <div>Check out the <Link className="text-white-500 hover:text-gray-500" href="/projects"><strong className={styles.tabText}>Projects</strong></Link> tab to interact with live demos of my projects.</div>
