@@ -5,5 +5,6 @@ This is Benjamin Yan's professional website built using [Next.js (Typescript)](h
 In this website, you can:
 
 - learn more about Benjamin Yan
-- try out some of his cool projects.
-- connect with him through various channels.
+- read educational articles that he has written
+- try out some of his cool projects
+- connect with him through various channels
